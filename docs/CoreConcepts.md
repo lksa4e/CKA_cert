@@ -2,13 +2,12 @@
      - 간단하고 안전하며 빠른 분산 된 신뢰할 수있는 키-값 저장소
        
 ## Install ETCD
-     - github 릴리스 페이지에서 운영 체제에 대한 관련 바이너리를 다운로드
-      (https://github.com/etcd-io/etcd/releases)
-       ```
+- github 릴리스 페이지에서 운영 체제에 대한 관련 바이너리를 다운로드(https://github.com/etcd-io/etcd/releases
+     ```
        ETCD V3.3.11 curl command
        
        $ https://github.com/etcd-io/etcd/releases/download/v3.3.11/etcd-v3.3.11-linux-amd64.tar.gz
-       ```
+     ```
      - 압축 풀기.
        ```
        $ tar xvzf etcd-v3.3.11-linux-amd64.tar.gz 
@@ -32,7 +31,7 @@
         $ ./etcdctl
         ```
         
-        ![etcdctl](../../images/etcdctl.PNG)
+        <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/etcdctl.PNG>
         
        K8s Reference Docs:
        - https://kubernetes.io/docs/concepts/overview/components/
