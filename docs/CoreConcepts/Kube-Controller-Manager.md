@@ -23,7 +23,7 @@
     ```
     $ wget https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kube-controller-manager
     ```
-  - 기본적으로 모든 컨트롤러가 활성화되어 있지만 **`kube-controller-manager.service`**에서 특정 컨트롤러를 활성화하도록 선택할 수 있음
+  - 기본적으로 모든 컨트롤러가 활성화되어 있지만 **`kube-controller-manager.service`** 에서 특정 컨트롤러를 활성화하도록 선택할 수 있음
     ```
     $ cat /etc/systemd/system/kube-controller-manager.service
     ```
@@ -33,6 +33,7 @@
   ```
   $ kubectl get pods -n kube-system
   ```
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/kube-controller-manager0.PNG>
   
 ## View kube-controller-manager options - kubeadm
 - **`/etc/kubernetes/manifests/kube-controller-manager.yaml`** POD 내의 옵션을 볼 수 있음
@@ -41,7 +42,7 @@
   ```
   
 ## View kube-controller-manager options - Manual
-- kubeadmin을 사용하지 않는 경우 **`kube-controller-manager.service`**에서 옵션을 볼 수 있음
+- kubeadmin을 사용하지 않는 경우 **`kube-controller-manager.service`** 에서 옵션을 볼 수 있음
   ```
   $ cat /etc/systemd/system/kube-controller-manager.service
   ```
