@@ -10,7 +10,25 @@
 ## ReplicaSet and Replication Controller 차이점
 - **`Replication Controller`** 은 **`ReplicaSet`** 으로 대체된 오래된 기술.
 - **`ReplicaSet`** 는 복제를 set up 하기위한 새로운 방법.
-- Replication Controller와 큰 차이점은 **`selector`** 를 지정해서 일치하는 **`labels`** 을 가진 POD에 대한 리플리카를 관리할 수 있는 점이다.
+- 셀렉터
+  - 레플리케이션 컨트롤러는 등호 기반이므로 레이블을 선택할 때 같은지(=) 다른지(!=)만 비교합니다.
+  - 레플리카세트는 집합 기반으로써 in, notin, exists 같은 연산자를 지원합니다.
+```yaml
+... # ReplicaSet
+spec:
+   replicas: 3
+   selector:
+     matchExpressions:
+      - {key: app, operator: In, values: [example, example, rs]}
+      - {key: teir, operator: NotIn, values: [production]}
+  template:
+     metadata:
+...
+```
+- rolling-update
+  - 레플리케이션 컨트롤러는 rolling-update 옵션을 사용할 수 있지만 레플리카세트는 사용할 수 없습니다.
+  - 레플리카세트는 디플로이먼트를 통하여 rolling-update를 지원합니다.
+
 
 ### 레플리케이션 컨트롤러(Replication Controller)
 - 레플리케이션 컨트롤러는 쿠버네티스 프로젝트 초기부터 있었던 컨트롤러입니다. 앞서 말한 것처럼 레플리케이션 컨트롤러는 파드를 관리하며 파드의 개수가 항상 일정하도록 유지합니다.
