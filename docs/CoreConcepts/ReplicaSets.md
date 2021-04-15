@@ -2,13 +2,15 @@
 
 ## What is a Replica and Why do we need a replication controller?
 - 항상 일정한 개수의 Pod가 실행될 수 있도록 유지
-- 
+- 로드밸런싱을 위해(여러 노드에 걸쳐서 Pod를 생성할 수 있음)
+
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rc.PNG>
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rc1.PNG>
   
 ## ReplicaSet and Replication Controller 차이점
 - **`Replication Controller`** 은 **`ReplicaSet`** 으로 대체된 오래된 기술.
 - **`ReplicaSet`** 는 복제를 set up 하기위한 새로운 방법.
+- Replication Controller와 큰 차이점은 **`selector`** 를 지정해서 일치하는 **`labels`** 을 가진 POD에 대한 리플리카를 관리할 수 있는 점이다.
 
 ### 레플리케이션 컨트롤러(Replication Controller)
 - 레플리케이션 컨트롤러는 쿠버네티스 프로젝트 초기부터 있었던 컨트롤러입니다. 앞서 말한 것처럼 레플리케이션 컨트롤러는 파드를 관리하며 파드의 개수가 항상 일정하도록 유지합니다.
@@ -29,7 +31,10 @@
 ## Creating a Replication Controller
 
 ## Replication Controller Definition File
-  
+- spec: 에는 pod definition file에서 apiVersion, kind를 제외한 나머지 부분을 template: 아래에(children) 붙여넣는다
+- 이후에 template과 동일 position에(sibling) replicas 지정을 해줌
+
+
    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rc2.PNG>
   
 ```
@@ -70,7 +75,8 @@
 ## Creating a ReplicaSet
   
 ## ReplicaSet Definition File
-
+- apiVersion은 RC와 다르게 apps/v1임
+- spec 부분은 rc와 동일하지만, selector가 존재함
    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rs.PNG>
 
 ```
@@ -116,7 +122,7 @@
     
 ## Labels and Selectors
 #### What is the deal with Labels and Selectors? Why do we label pods and objects in kubernetes?
-
+- label을 ReplicaSet에 대한 필터로 사용할 수 있음. == 여러개의 Pod 중에서 어떤것을 Monitoring 해야하는지를 편리하게 함
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/labels.PNG>
   
 ## replicaset 확장 방법
@@ -151,6 +157,7 @@
   $ kubectl apply -f replicaset-definition.yaml
   ```
   - 두번째 방법 : **`kubectl scale`** 커맨드
+  - **`kubectl scale`** 커맨드는 구성 file까지 수정해주지는 않는다
   ```
   $ kubectl scale --replicas=6 -f replicaset-definition.yaml
   ```
