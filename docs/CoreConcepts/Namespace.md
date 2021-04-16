@@ -53,7 +53,7 @@ spec:
     image: nginx
  ```
   
-  <https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns10.PNG>
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns10.PNG>
   
 - Namespace definition file(namespace-dev.yaml)
 ```
@@ -70,7 +70,7 @@ metadata:
   ```
   $ kubectl create namespace dev
   ```
-  <https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns11.PNG>
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns11.PNG>
   
 - 별도의 command 없이 다른 Namespace를 지속적으로 사용하기 위한 방법 
   ```
@@ -99,7 +99,7 @@ spec:
   ```
   $ kubectl create -f compute-quota.yaml
   ```
-  <https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns13.PNG>
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ns13.PNG>
   
 K8s Reference Docs:
 - https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
