@@ -25,6 +25,8 @@
  
  1. NodePort
     - 클러스터 IP로만 접근이 가능한것이 아니라,IP와 포트를 통해서도 Node 내부 Pod에 접근이 가능하게 된다.
+    - 가질 수 있는 port area는 30000~32767까지
+    - 필수 영역은 port, target port는 입력 안할시 port와 동일하고, nodePort는 입력 안할 시 가능한 것중 랜덤으로 부여
       ```
       apiVersion: v1
       kind: Service
@@ -40,6 +42,8 @@
      <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvnp.PNG>
       
       #### To connect the service to the pod
+      - Service만 생성하고 Pod에 연결하지 않으면 작동하지 않음
+      - Selector와 Label을 지정해주어야만 실제 pod와 연결할 수 있음
       ```
       apiVersion: v1
       kind: Service
@@ -80,7 +84,7 @@
       <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvnp3.PNG>
       
       #### Pods 들이 여러 Node에 분산되어 있을 때
-     
+     - k8s 에서 알아서 Cluster를 Service로 묶어주므로 별다른 구성 없이 동일 Port 통해서 access 가능
       <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvnp4.PNG>
      
             
