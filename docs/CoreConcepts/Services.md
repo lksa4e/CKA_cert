@@ -24,9 +24,9 @@
    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srv-types.PNG>
  
  ## 1. NodePort
-    - 클러스터 IP로만 접근이 가능한것이 아니라,IP와 포트를 통해서도 Node 내부 Pod에 접근이 가능하게 된다.
-    - 가질 수 있는 port area는 30000~32767까지
-    - 필수 영역은 port, target port는 입력 안할시 port와 동일하고, nodePort는 입력 안할 시 가능한 것중 랜덤으로 부여
+   - 클러스터 IP로만 접근이 가능한것이 아니라,IP와 포트를 통해서도 Node 내부 Pod에 접근이 가능하게 된다.
+   - 가질 수 있는 port area는 30000~32767까지
+   - 필수 영역은 port, target port는 입력 안할시 port와 동일하고, nodePort는 입력 안할 시 가능한 것중 랜덤으로 부여
       ```
       apiVersion: v1
       kind: Service
@@ -41,9 +41,9 @@
       ```
      <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvnp.PNG>
       
-      #### To connect the service to the pod
-      - Service만 생성하고 Pod에 연결하지 않으면 작동하지 않음
-      - Selector와 Label을 지정해주어야만 실제 pod와 연결할 수 있음
+ #### To connect the service to the pod
+  - Service만 생성하고 Pod에 연결하지 않으면 작동하지 않음
+  - Selector와 Label을 지정해주어야만 실제 pod와 연결할 수 있음
       ```
       apiVersion: v1
       kind: Service
@@ -125,8 +125,8 @@ $ kubectl get services
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvc3.PNG>
 
 ## 3. LoadBalancer
-    - Where the service provisions a **`loadbalancer`** for our application in supported cloud providers.
-    - 보통 클라우드 벤더에서 제공하는 설정 방식으로, 외부 IP 를 가지고 있는 로드밸런서를 할당한다. 외부 IP를 가지고 있기  때문에, 클러스터 외부에서 접근이 가능하다.
+  - Where the service provisions a **`loadbalancer`** for our application in supported cloud providers.
+  - 보통 클라우드 벤더에서 제공하는 설정 방식으로, 외부 IP 를 가지고 있는 로드밸런서를 할당한다. 외부 IP를 가지고 있기  때문에, 클러스터 외부에서 접근이 가능하다.
 
 
     
