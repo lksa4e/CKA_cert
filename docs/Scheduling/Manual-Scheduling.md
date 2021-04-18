@@ -2,7 +2,8 @@
 ## How Scheduling Works
 - 클러스터에 스케줄러가 없는 경우 어떻게 합니까?
   - 모든 POD에는 기본적으로 설정되지 않은 NodeName이라는 필드가 있습니다. 일반적으로 매니페스트 파일을 만들 때이 필드를 지정하지 않으며 kubernetes에서 자동으로 추가합니다.
-  - 식별되면 바인딩 개체를 만들어 nodeName 속성을 노드 이름으로 설정하여 노드에서 POD를 예약합니다.
+  - NodeName이 지정되지 않은 Pod는 스케쥴러가 감지하여 자동으로 Scheduling 함
+  - 쿠버네티스는 POD의 NodeName 속성을 직접 변경하는 것을 허용하지 않으며, Binding 오브젝트를 API 호출을 통해 생성해서 스케줄링을 모방할 수 있다.
     ```
     apiVersion: v1
     kind: Pod
