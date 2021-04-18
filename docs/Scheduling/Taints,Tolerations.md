@@ -2,6 +2,7 @@
 - 포드 간 관계 및 노드에 배치되는 포드를 제한하는 방법
 
 #### Taint 및 Tolerations는 노드에서 예약 할 수있는 포드에 대한 제한을 설정하는 데 사용됩니다. 
+- Taints는 노드에 설정하고, Toleration은 Pod에 설정한다.
 - 노드의 특정 taint에 내성이있는 포드 만 해당 노드에서 예약됩니다.
 - Taints와 Toleration은 POD가 어떤 노드로 스케줄링 될 지 결정하기 위해 사용하는 게 아니다.
    노드가 자신에게 부여된 Taints를 Toleration하는 POD만을 허용하는 것이다.
