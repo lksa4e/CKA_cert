@@ -23,7 +23,7 @@
  
    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srv-types.PNG>
  
- 1. NodePort
+ ## 1. NodePort
     - 클러스터 IP로만 접근이 가능한것이 아니라,IP와 포트를 통해서도 Node 내부 Pod에 접근이 가능하게 된다.
     - 가질 수 있는 port area는 30000~32767까지
     - 필수 영역은 port, target port는 입력 안할시 port와 동일하고, nodePort는 입력 안할 시 가능한 것중 랜덤으로 부여
@@ -88,7 +88,7 @@
       <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvnp4.PNG>
      
             
- 2. ClusterIP
+ ## 2. ClusterIP
     - 이 경우 서비스는 클러스터 내에 **`가상 IP`** 를 생성하여 프런트 엔드 서버 세트와 같은 다른 서비스와 백엔드 서버 세트 간의 통신을 가능하게합니다.
     - 디폴트 설정으로, 서비스에 클러스터 IP (내부 IP)를 할당한다. 쿠버네티스 클러스터 내에서는 이 서비스에 접근이 가능하지만, 클러스터 외부에서는 외부 IP 를 할당  받지 못했기 때문에, 접근이 불가능하다
     
@@ -122,8 +122,8 @@ $ kubectl create -f service-definition.yaml
 ```
 $ kubectl get services
 ```
-  ![srvc3](../../images/srvc3.PNG)
- 3. LoadBalancer
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvc3.PNG>
+  ## 3. LoadBalancer
     - Where the service provisions a **`loadbalancer`** for our application in supported cloud providers.
     - 보통 클라우드 벤더에서 제공하는 설정 방식으로, 외부 IP 를 가지고 있는 로드밸런서를 할당한다. 외부 IP를 가지고 있기  때문에, 클러스터 외부에서 접근이 가능하다.
 
