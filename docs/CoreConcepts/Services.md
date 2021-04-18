@@ -123,7 +123,8 @@ $ kubectl create -f service-definition.yaml
 $ kubectl get services
 ```
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/srvc3.PNG>
-  ## 3. LoadBalancer
+
+## 3. LoadBalancer
     - Where the service provisions a **`loadbalancer`** for our application in supported cloud providers.
     - 보통 클라우드 벤더에서 제공하는 설정 방식으로, 외부 IP 를 가지고 있는 로드밸런서를 할당한다. 외부 IP를 가지고 있기  때문에, 클러스터 외부에서 접근이 가능하다.
 
