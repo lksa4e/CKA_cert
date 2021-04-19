@@ -34,3 +34,29 @@ spec:
       image: nginx
 ```
       
+## Edit a Pod
+- 아래 이외의 기존 POD 사양은 편집 할 수 없습니다.
+  - spec.containers[*].image
+  - spec.initContainers[*].image
+  - spec.activeDeadlineSeconds
+  - spec.tolerations
+- 예를 들어 실행중인 포드의 환경 변수, 서비스 계정, 리소스 제한을 변경할 수 없습니다. 그러나 정말로 원한다면 두 가지 옵션이 있습니다.
+
+### 1. pod 삭제하고 다시 만들기 (kubectl edit)
+```
+> kubectl edit pod <pod name> //저장하려고 하면 저장 안되고 temp 파일만 남음 그거를 복사해서 yaml파일
+> kubectl delete pod webapp
+> kubectl create -f /tmp/kubectl-edit-ccvrq.yaml
+```
+### 2. pod 삭제하고 다시 만들기 (yaml 추출)
+```
+> kubectl get pod webapp -o yaml > my-new-pod.yaml
+> vi my-new-pod.yaml
+> kubectl delete pod webapp
+> kubectl create -f my-new-pod.yaml
+```
+### 3. Deployment를 통한 Pod 변경 (추천)
+- 포드 템플릿은 Deployment spec의 하위 항목이므로 변경 될 때마다 배포가 자동으로 삭제되고 새로운 변경 사항으로 새 포드가 생성됩니다.
+```
+> kubectl edit deployment my-deployment
+```
