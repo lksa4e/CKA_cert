@@ -1,7 +1,6 @@
 # Node Affinity
-- Node Affinity 기능의 목적은 POD를 특정 노드에 배치를 제한 하기 위함이다
 
-#### Node Affinity의 주요 기능은 포드가 특정 노드에서 호스팅되도록하는 것입니다.
+#### Node Affinity의 주요 기능은 포드가 특정 노드에서 호스팅되도록하는 것
 - **`Node Selectors`** 만으로는 표현의 한계가 존재함
   ```
   apiVersion: v1
