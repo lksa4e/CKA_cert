@@ -1,4 +1,7 @@
 # Node Selectors
+- Pod에 Node Selector라는 속성을 부여하여 원하는 Node에 배정될 수 있도록 함
+- 특정 App이 일정 규모 이상의 Resource를 요구할 때 사용 가능
+- nodeSelector의 Large value는 Node에 지정해놓은 레이블과 매칭해서 사용됨
 
 #### Node Selector라는 새 속성을 spec 섹션에 추가하고 레이블을 지정합니다.
 - 스케줄러는 이러한 레이블을 사용하여 포드를 배치 할 올바른 노드를 일치시키고 식별합니다.
