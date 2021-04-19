@@ -2,6 +2,8 @@
 
 #### kube-apiserver없이 kubelet에 포드 정의 파일을 제공하는 방법
 - Pod에 대한 정보를 저장하도록 지정된 서버의 디렉토리에서 Pod definition file을 읽도록 kubelet을 구성 할 수 있음
+- kubelet은 주기적으로 directory를 읽고, Pod를 생성함 + Pod가 계속 살아있도록 보장함(파괴시 재생성, 변경시 재생성)
+- directory의 파일을 삭제할 경우 Pod도 자동 삭제됨(다른 명령어를 통해 Pod를 삭제하는 방법은 없음)
 
 ## Configure Static Pod
 - 지정된 디렉토리는 호스트의 모든 디렉토리가 될 수 있으며 해당 디렉토리의 위치는 서비스를 실행하는 동안 옵션으로 kubelet에 전달됩니다.
