@@ -29,12 +29,12 @@
 
 ## Static Pods - Use Case
 
+### Static pod는 k8s Control Plane에 의존적이지 않기 때문에 Control plane component 배포 가능(controller-manager, apiserver, etcd)
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/sp4.PNG>
-  
+
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/sp5.PNG>
   
 ## Static Pods vs DaemonSets
-
    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/spvsds.PNG>
   
 
