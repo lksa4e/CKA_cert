@@ -34,16 +34,16 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
 
 ## ConfigMaps
 - ConfigMaps는 쿠버네티스 상에 설정 관련 데이터를 Key-Value 형태로 저장할 때 사용하는 오브젝트이다
-- There are 2 phases involved in configuring ConfigMaps. 
-  - First, create the configMaps
-  - Second, Inject then into the pod.
-- There are 2 ways of creating a configmap.
+- ConfigMaps 구성의 2가지 단계. 
+  - 1. configMaps 생성
+  - 2. configMaps를 Pod에 넣기
+- configmap을 만드는 2가지 방법.
   - The Imperative way
     ```
     $ kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
     $ kubectl create configmap app-config --from-file=app_config.properties (Another way)
     ```
-    ![cmi](../../images/cmi.PNG)
+    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/cmi.PNG>
     
   - The Declarative way
     
@@ -60,7 +60,7 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
     Create a config map definition file and run the 'kubectl create` command to deploy it.
     $ kubectl create -f config-map.yaml
     ```
-    ![cmd1](../../images/cmd1.PNG)
+    <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/cmd1.PNG>
     
  ## View ConfigMaps
  - To view configMaps
@@ -73,7 +73,7 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
    $ kubectl describe configmaps
    ```
    
-   ![cmv](../../images/cmv.PNG)
+   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/cmv.PNG>
    
  ## ConfigMap in Pods
  - Inject configmap in pod
@@ -105,13 +105,13 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
    $ kubectl create -f pod-definition.yaml
    ```
   
-   ![cmp](../../images/cmp.PNG)
+   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/cmp.PNG>
    
- #### There are other ways to inject configuration variables into pod   
- - You can inject it as a **`Single Environment Variable`** 
- - You can inject it as a file in a **`Volume`**
+ #### 구성 변수를 포드에 삽입하는 다른 방법이 있습니다  
+ - **`Single Environment Variable`** 로 삽입
+ - **`Volume`** 에 파일로 삽입
  
-   ![cmp1](../../images/cmp1.PNG)
+   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/cmp1.PNG>
    
 
 # Secrets
