@@ -97,3 +97,5 @@ $ kubectl rollout undo deployment/myapp-deployment
 #### K8s Reference Docs
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment
 - https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment
+
+참고 : https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/docs/05-Application-Lifecycle-Management/02-RollingUpdates-and-Rollback.md
