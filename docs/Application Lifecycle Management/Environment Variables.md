@@ -117,11 +117,10 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
 # Secrets
 - ConfigMaps은 설정 관련 데이터를 일반적인 텍스트 포맷을 저장한다. 하지만 Secrets은 비밀스러운 데이터나 비밀번호, 비밀키 같은 민감한 데이터를 저장하기 위해 사용한다.  
 - 근본적으로 Secrets은 Configmaps와 같지만 데이터를 BASE64로 인코딩해서 저장한다는 점에서 차이가 있다.  
+- Secrets을 매니페스트 파일로 정의해서 생성할 때는 반드시 데이터를 BASE64로 해시한 뒤 입력해야 한다
 ## Web-Mysql Application
-
- <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/web.PNG>
  
-- One way is to move the app properties/envs into a configmap. But the configmap stores data into a plain text format. It is definitely not a right place to store a password.
+- 한 가지 방법은 앱 속성 / env를 configmap으로 이동하는 것입니다. 그러나 configmap은 데이터를 일반 텍스트 형식으로 저장합니다. 확실히 암호를 저장하기에 적합한 장소가 아닙니다.
   ```
   apiVersion: v1
   kind: ConfigMap
@@ -132,15 +131,13 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
     DB_User: root
     DB_Password: paswrd
   ```
-  ![web1](../../images/web1.PNG)
-  
-- Secrets are used to store sensitive information. They are similar to configmaps but they are stored in an encrypted format or a hashed format.
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/web1.PNG>
 
 #### There are 2 steps involved with secrets
 - First, Create a secret
 - Second, Inject the secret into a pod.
   
-  ![sec](../../images/sec.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/sec.PNG>
   
 #### There are 2 ways of creating a secret
 - The Imperative way
@@ -148,7 +145,7 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
   $ kubectl create secret generic app-secret --from-literal=DB_Host=mysql --from-literal=DB_User=root --from-literal=DB_Password=paswrd
   $ kubectl create secret generic app-secret --from-file=app_secret.properties
   ```
-  ![csi](../../images/csi.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/csi.PNG>
   
 - The Declarative way
   ```
@@ -173,11 +170,11 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
   $ kubectl create -f secret-data.yaml
   ```
 
-  ![csd](../../images/csd.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/csd.PNG>
   
 ## Encode Secrets
 
-  ![enc](../../images/enc.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/enc.PNG>
   
 ## View Secrets
 - To view secrets
@@ -193,7 +190,7 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
   $ kubectl get secret app-secret -o yaml
   ```
   
-  ![secv](../../images/secv.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/secv.PNG>
   
 ## Decode Secrets
 - To decode secrets
@@ -202,10 +199,10 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
   $ echo -n "cm9vdA==" |base64 --decode
   $ echo -n "cGFzd3Jk" |base64 --decode
   ```
-  ![secd](../../images/secd.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/secd.PNG>
   
 ## Configuring secret with a pod
-- To inject a secret to a pod add a new property **`envFrom`** followed by **`secretRef`** name and then create the pod-definition
+- Secret을 Pod에 삽입하려면 새 속성 **`envFrom`** 다음에 **`secretRef`** 이름을 추가 한 다음 포드 정의를 만듭니다.
   
   ```
   apiVersion: v1
@@ -235,24 +232,23 @@ $ docker run -e APP_COLOR=pink simple-webapp-color
   ```
   $ kubectl create -f pod-definition.yaml
   ```
-  ![secp](../../images/secp.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/secp.PNG>
   
 #### There are other ways to inject secrets into pods.
-- You can inject as **`Single ENV variable`**
-- You can inject as whole secret as files in a **`Volume`**
+- **`Single ENV variable`** 로 삽입
+- **`Volume`** 에 파일처럼 전체 비밀을 삽입 할 수 있습니다.
 
-  ![seco](../../images/seco.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/seco.PNG>
   
 ## Secrets in pods as volume
-- Each attribute in the secret is created as a file with the value of the secret as its content.
+- 비밀의 각 속성은 비밀의 값을 내용으로하는 파일로 생성됩니다.
   
-  ![secpv](../../images/secpv.PNG)
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/secpv.PNG>
 
-  
-
-#### Additional Notes: [A Note on Secrets](https://kodekloud.com/courses/certified-kubernetes-administrator-with-practice-tests/lectures/10589148)
 
 #### K8s Reference Docs
 - https://kubernetes.io/docs/concepts/configuration/secret/
 - https://kubernetes.io/docs/concepts/configuration/secret/#use-cases
 - https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/
+
+참고 : https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/docs/05-Application-Lifecycle-Management/10.Secrets.md
