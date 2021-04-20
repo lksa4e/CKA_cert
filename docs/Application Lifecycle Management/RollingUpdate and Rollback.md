@@ -3,7 +3,8 @@
    이것은 변경을 추적할 수 있도록 도와주고 필요할 때 Deployment의 이전 버전으로 롤백할 때 유용하다.
 
 ## Rollout and Versioning in a Deployment
-
+- 처음 deployment를 만들면 rollout을 트리거 하고, 이 rollout은 revision 1을 만든다.
+- 이후에 어플리케이션이 수정되어 update가 일어나면 새로운 rollout이 트리거되고, 이 rollout이 revision 2를 만든다.
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rollv.PNG>
   
 ## Rollout commands
