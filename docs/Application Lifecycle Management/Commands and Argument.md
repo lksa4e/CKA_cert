@@ -41,6 +41,16 @@
   
 ## Entrypoint Instruction
 - EntryPoint는 컨테이너가 시작될 때 실행될 프로그램 명령어와 명령 옵션을 지정하는 Commmand와 유사하다.
+```
+     command: ["sleep2.0"]
+     args: ["10"]
+     > docker run ubuntu-sleeper sleep 10
+```
+- 기존 위와 같던 command, arg에서 엔트리포인트를 사용하면 아래처럼 arg만 지정하여 사용할 수 있다.
+```
+     entrypoint: ["sleep"]
+     > docker run ubuntu-sleeper 10
+```
 
 #### K8s Reference Docs
 - https://docs.docker.com/engine/reference/builder/#cmd
