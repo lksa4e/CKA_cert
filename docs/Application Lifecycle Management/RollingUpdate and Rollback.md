@@ -65,7 +65,7 @@
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/rcrl.PNG>
   
 ## Upgrades
-
+- 업데이트 할 때 새로운 Replicaset을 만들고, 기존 RS에서 하나하나 지우면서 새로운 RS에 옮김
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/up.PNG>
   
 ## Rollback
