@@ -58,10 +58,10 @@
 # Commands and Arguments in Kubernetes
 - docker run 명령에 추가되는 모든 항목은 배열 형식으로 포드 정의 파일의 **`args` ** 속성으로 이동합니다.
 - POD를 생성할 때, POD 안에서 동작하는 컨테이너를 위한 command와 args를 정의할 수 있다.
-- command를 정의하기 위해서는, POD 안에서 실행되는 컨테이너에 **`command`** 필드를 포함시킨다.
-- command에 대한 인자를 정의하기 위해서는, 구성 파일에 **`args`** 필드를 포함시킨다. 정의한 command와 args는 POD가 생성되고 난 이후에는 변경될 수 없다
+- docker file의 Entrypoint에 해당하는 것은 **`command`** 필드이고, CMD에 해당하는 것은 **`args`** 이다.
+- 정의한 command와 args는 POD가 생성되고 난 이후에는 변경될 수 없다
 - 매니페스트 파일 안에서 정의하는 command와 args는 컨테이너 도커 이미지가 제공하는 기본 커맨드와 인자들보다 우선시 된다.
-- 만약 args를 정의하고 command를 정의하지 않는다면, 기본 command가 새로운 args와 함께 사용된다.
+- 만약 args를 정의하고 command를 정의하지 않는다면, 도커 파일의 기본 CMD가 pod definition의 args와 함께 사용된다.
 
   ```
   apiVersion: v1
