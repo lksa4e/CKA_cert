@@ -1,0 +1,130 @@
+# TLS in Kubernetes
+Root Certificate를 기반으로 만들어진 Client Certificate, Server Certificate가 존재하게 된다.   
+쿠버네티스 클러스터의 마스터 노드와 워커 노드간 통신이나 `kubectl`사용자와 kube-api server간 통신은 모두 TLS 보안이 적용된다.   
+따라서 쿠버네티스 클러스터 내부의 서비스들은 모두 Server Certificate를 사용해서 통신을 암호화하고, 클라이언트는 Client Certificate를 사용해서 자신의 신분을 증명해야 한다.  
+하지만 Certificate는 인증된 기관을 통해 서명되어야 하기 때문에 Certificate Authority(CA)가 필요하다.  
+쿠버네티스 클러스터를 위한 CA는 브라우저로 접속하는 웹 사이트에서 제공하는 TLS 인증서의 CA와 원리는 같다고 할 수 있지만 코모도, 시만텍, 고대디 등과 같은 인증 기관으로부터 서명을 받는 대신 자체적으로 서명한 CA를 사용한다.   
+이 CA를 Root Certificate라고 하며, CA를 만들게 되면 `ca.crt`, `ca.key`을 갖게 된다.  
+Certificates의 Public key는 보통 `.crt` 또는 `.pem`이라는 이름을 갖고, Private key는 `.key` 또는 `*-key.pem` 이름을 사용한다.  
+
+
+#### 두 가지 기본 요구 사항은 클러스터 내에 모든 다양한 서비스가 서버 인증서를 사용하도록하고 모든 클라이언트가 클라이언트 인증서를 사용하여 자신이 누구인지 확인하는 것입니다.
+- Server Certificates for Servers
+- Client Certificates for Clients
+
+##### - Server Certificates for Servers
+kube-api server의 경우, 사용자가 HTTP 요청을 통해 쿠버네티스 클러스터를 관리할 수 있기 때문에 모든 통신은 보안이 되어야 한다.   
+따라서 일반적인 웹 서버의 HTTPS 제공 방식과 동일하게 TLS Certificate와 Private Key가 필요하다.  
+`kubeadm`으로 클러스터를 구축하면 `/etc/kuberntes/pki` 디렉터리 밑에 `apiserver.crt`와 `apiserver.key`가 생성되어 있다.   
+그 밖에 etcd 서버도 동일한 목적으로 `etcdserver.crt`, `etcdserver.key`이 만들며, 마스터 노드와 워커 노드에 실행 중인 Kubelet도 Kube-api server에서 
+상태 관리를 위한 통신을 위한 HTTP API 서비스를 제공하기 때문에 `kubelet.crt`, `kubelet.key`를 만들게 된다.   
+
+##### - Client Certificates for Clients
+Client Certificates는 다양한 사용자(Client)가 자신의 신분을 증명하기 위해 사용하는 Certificates이다.   
+`kubectl`을 사용하는 클라이언트는 Kube-api server와 통신하기 위해 `admin.crt`와 `admin.key`를 만들어야 한다.   
+Kube-Scheduler도 POD를 스케줄링하기 위한 정보를 얻기 위해 Kube-api server와 통신하기 때문에 `scheduler.crt`,`scheduler.key`를 만들어야 한다. 
+Kube-Scheduler는 관리자 클라이언트와 비슷한 클라이언트일 뿐이다.   
+그밖에 Kube-Controller-Manager와 Kube-Proxy도 Kube-api server와 통신해야 하기 때문에 위와 동일하게 Key 페어를 갖고 있어야 한다. 
+
+
+kube-api server는 ETCD 서버와 통신하기 때문에 ETCD 서버 입장에서 Kube-api server는 클라이언트이다.   
+따라서 Kube-api server도 etcd 서버와 통신하기 위한 Certificate 키 페어를 가져야 한다.  
+이미 만든 `apiserser.crt`와 `apiserver.key`를 사용해도 되고 새로운 키 페어를 만들어도 된다. (`apiserver-etcd-client.crt`, `apiserver-etcd-client.key`)  
+
+Kube-api server는 워커 노드 상태를 모니터링하기 위해 워커 노드에서 실행 중인 Kubelet server와도 통신한다. 
+이 경우에도 마찬가지로 신분 인증을 위해 Certificate 키 페어가 필요하다. (`apiserver-kubelet-client.crt`, `apiserver-kubelet-client.key`)  
+
+
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/tls.PNG>
+  
+  
+#### k8s 클러스터 내의 다양한 구성 요소를 살펴보고 다양한 서버와 클라이언트를 식별하고 누가 누구와 대화하는지 확인하겠습니다.
+
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/certs.PNG>
+  
+
+# TLS in kubernetes - Certificate Creation
+
+## Generate Certificates
+- There are different tools available such as easyrsa, openssl or cfssl etc. or many others for generating certificates.
+
+## Certificate Authority (CA)
+- 위에서 다룬 Server Certificate와 Client Certificate에 사인을 하기 위한 Root Certificates가 존재한다.   
+  이 Root Certificate는 `ca.crt`와 `ca.key` 쌍으로 존재하고, ETCD에서 사용하는 Client Certificate와 Server Certificate에 사인하기 위한 `ca.crt`와 `ca.key`가 따로 존재하기도 한다. 
+
+- Generate Keys
+  ```
+  $ openssl genrsa -out ca.key 2048
+  ```
+- Generate CSR
+  ```
+  $ openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
+  ```
+- Sign certificates
+  ```
+  $ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+  ```
+ 
+ <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ca1.PNG>
+ 
+## Generating Client Certificates
+
+#### Admin User Certificates
+
+- Generate Keys
+  ```
+  $ openssl genrsa -out admin.key 2048
+  ```
+- Generate CSR
+  ```
+  $ openssl req -new -key admin.key -subj "/CN=kube-admin" -out admin.csr
+  ```
+- Sign certificates
+  ```
+  $ openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key -out admin.crt
+  ```
+  
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/ca2.PNG>
+  
+- Certificate with admin privilages
+  ```
+  $ openssl req -new -key admin.key -subj "/CN=kube-admin/O=system:masters" -out admin.csr
+  ```
+  
+#### kube-apiserver에 액세스하는 다른 모든 구성 요소에 대한 클라이언트 인증서를 생성하려면 동일한 절차를 따릅니다.
+
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/crt1.PNG>
+  
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/crt2.PNG>
+  
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/crt3.PNG>
+   
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/crt4.PNG>
+  
+## Generating Server Certificates
+
+## ETCD Server certificate
+
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/etc1.PNG>
+  
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/etc2.PNG>
+  
+## Kube-apiserver certificate
+
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/api1.PNG>
+  
+  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/api2.PNG>
+  
+## Kubectl Nodes (Server Cert)
+
+   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/kctl1.PNG>
+   
+## Kubectl Nodes (Client Cert)
+
+   <igm src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/kctl2.PNG>
+   
+참고 : https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/docs/07-Security/07-TLS-in-Kubernetes-Certificate-Creation.md
+https://github.com/jonnung/cka-practice/blob/master/6-security.md
+ 
+  
+ 
