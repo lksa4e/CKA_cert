@@ -119,5 +119,5 @@ $ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kuber
 #### K8s Reference Docs
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/
 
-
- 
+참고 : https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/docs/06-Cluster-Maintenance/07-Backup-and-Restore-Methods.md
+ https://github.com/jonnung/cka-practice/blob/master/5-cluster-maintenance.md
