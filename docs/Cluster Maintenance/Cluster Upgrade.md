@@ -18,14 +18,17 @@
   
 ## Upgrading a Cluster
 - 클러스터 업그레이드에는 두 가지 주요 단계가 포함됩니다
-1. 마스터 노드 업그레이드
-2. 워커 노드 업그레이드
+  1. 마스터 노드 업그레이드
+    1.1 마스터 노드를 업그레이드하기 위해 중단시켜도 worker 노드의 Application 동작에는 영향을 주진 않음 (but, master의 componenet 사용 불가 -> 새로운 Pod, API 서버,,,)
+  2. 워커 노드 업그레이드
   
 #### 워커 노드를 업그레이드하는 데 사용할 수있는 다양한 전략이 있습니다
 - 하나는 한 번에 모두 업그레이드하는 것입니다. 하지만 그러면 Pod가 다운되고 사용자는 애플리케이션에 액세스 할 수 없습니다.
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/stg1.PNG>
+  
 - 두 번째는 한 번에 하나의 노드를 업그레이드하는 것입니다. 
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/stg2.PNG>
+  
 - 세 번째는 클러스터에 새 노드를 추가하는 것입니다.
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/stg3.PNG>
   
@@ -54,6 +57,8 @@
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/kubeu.PNG>
   
 - Upgrade 'kubelet' on the master node
+- kubelet은 kubeadm에 의해 자동으로 업그레이드 되지 않음
+
   ```
   $ apt-get upgrade kubelet=1.12.0-00
   ```
