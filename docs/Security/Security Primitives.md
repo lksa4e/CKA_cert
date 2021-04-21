@@ -12,13 +12,13 @@
  
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/seck.PNG>
   
-- **Authentication** (Who can access?)
+- **Authentication** (Who can access? - to API Server)
 	- Files - Username and password
 	- Files - Username and Tokens
 	- Certificates
 	- External Authentication providers - LDAP
 	- Service Accounts
-- **Authorization** (What can they do?)
+- **Authorization** (What can they do? - 클러스터에 access 후)
 	- RBAC Authorization
 	- ABAC Authorization
 	- Node Authrorization
