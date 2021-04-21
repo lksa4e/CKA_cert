@@ -2,7 +2,7 @@
 - 모든 쿠버네티스 구성 요소는 다른 릴리즈 버전을 가질 수 있다.
 - Kube API 서버는 컨트롤 플레인의 핵심 구성요소이며, 다른 구성 요소보다 Kube API 서버 버전이 높아야 한다.
 - Cotroller-manager와 Scheduler는 Kube API 버전보다 1개까지 낮아도 괜찮고, kubelet과 Kube Proxy는 2개 버전까지 낮아도 괜찮다.
-- kubectl 은 Kube API 버전보다 1개 높거나 같아야 한다.
+- kubectl 은 Kube API 버전보다 1개 높거나 낮거나 같아야 한다(버전 1개 차이까지만 괜찮음)
 - kube-apiserver 버전이 v1.10일 때 --> Controller-manager, kube-scheduler 버전은 v1.9 또는 v1.10 가능하고, kubelet, kube-proxy는 v1.8, v1.9 또는 v1.10으로 가능하다.
   
 #### 언제든지 kubernetes는 최신 3 개의 마이너 버전 만 지원합니다
