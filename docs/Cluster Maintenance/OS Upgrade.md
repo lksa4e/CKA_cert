@@ -1,6 +1,6 @@
 # OS Upgrades
 
-#### 노드에 문제가 생겨서 해당 노드에 실행 중인 POD는 5분 안에(kube-controller-manger의 --pod-eviction-timeout 옵션에 따름) 정상화 되지 않을 경우 다른 노드에 스케줄링 된다.
+#### 노드에 문제가 생겨서 해당 노드에 실행 중인 POD는 5분 안에(kube-controller-manger의 --pod-eviction-timeout 옵션에 따름 - default 5 min) 정상화 되지 않을 경우 다른 노드에 스케줄링 된다.
 
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/os.PNG>
   
