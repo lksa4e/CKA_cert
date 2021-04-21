@@ -4,6 +4,35 @@
 $ kubectl get all --all-namespaces -o yaml > all-deploy-services.yaml
 ```
 
+## ETCD 백업 & 복구
+- 쿠버네티스 공식 사이트에는 ETCD를 백업하고 복구하는 방법이 자세하게 나와있지 않다. 따라서 아래 명령어의 암기 필요
+- Backup - ETCD
+  ```
+  ETCDCTL_API=3 etcdctl \
+  --endpoints=https://[127.0.0.1]:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /tmp/snapshot-pre-boot.db
+  ```
+- Restore - ETCD Snapshot
+  ```
+  ETCDCTL_API=3 etcdctl \
+    --endpoints=https://[127.0.0.1]:2379 \
+    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+    --cert=/etc/kubernetes/pki/etcd/server.crt \
+    --key=/etc/kubernetes/pki/etcd/server.key \
+    --name=master \
+    --data-dir /var/lib/etcd-from-backup \
+    --initial-cluster-token=etcd-cluster-1 \
+    --initial-cluster=master=https://127.0.0.1:2380 \
+    --initial-advertise-peer-urls=https://127.0.0.1:2380 \
+    snapshot restore /tmp/snapshot-pre-boot.db
+  ```
+- ETCD POD 재시작 kubeadm으로 클러스터를 구성하는 경우 기본적으로 ETCD가 Static POD로 실행된다.
+따라서 /etc/kubernetes/manifests/etcd.yaml 파일에 ETCD POD 명세가 존재한다.
+위 복구 과정에서 추가한 옵션 중 --data-dir과 --initial-cluster-token을 etcd 컨테이너 command 옵션에 추가 또는 수정해줘야 한다.
+그리고 --data-dir이 변경되었기 때문에 해당 폴더에 대한 volumes와 volumeMounts 부분도 수정해야 한다. (사실 volumeMounts의 hostPath.path만 수정하면 된다)
 ## Backup Candidates
  
  <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/bc.PNG>
