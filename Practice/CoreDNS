@@ -35,7 +35,8 @@ kubernetes cluster.local in-addr.arpa ip6.arpa {
 8. What name can be used to access the hr web server from the test Application?
 You can execute a curl command on the test pod to test. Alternatively, the test Application also has a UI. 
 Access it using the tab at the top of your terminal named"test-app"
---> web-service
+--> web-service (default Namespace에 같이 있기 때문에 ns, svc 등 붙을 필요 없음)
+--> 확실한 파악을 위해서는 selector 레이블과 svc 확인 필요
 
 9. Which of the names CANNOT be used to access the HR service from the test pod?
 --> web-service.pod
