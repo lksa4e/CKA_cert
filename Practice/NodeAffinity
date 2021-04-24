@@ -1,0 +1,30 @@
+1. How many Labels exist on node node01?
+--> kubectl describe node node01
+==> kubectl get nodes node01 --show-labels
+
+2. What is the value set to the label beta.kubernetes.io/arch on node01?
+--> kubectl describe node node01
+
+3. Apply a label color=blue to node node01
+--> kubectl label node node01 color=blue
+
+4. Create a new deployment named blue with the nginx image and 3 replicas
+--> kubectl create deployment blue --image=nginx --replicas=3 --dry-run=client -o yaml > blue.yaml
+
+5. Which nodes can the pods for the blue deployment placed on?
+Make sure to check taints on both nodes!
+--> kubectl describe nodes
+==> kucetl get pods -o wide 
+
+6. Set Node Affinity to the deployment to place the pods on node01 only
+--> vi blue.yaml
+--> k8s docs 참고
+
+==> kubectl get deployments.apps blue -o yaml > blue.yaml
+
+7. Which nodes are the pods placed on now?
+--> kubectl get pods -o wide
+
+8. Create a new deployment named red with the nginx image and 2 replicas, and ensure it gets placed on the master/controlplane node only.
+Use the label - node-role.kubernetes.io/master - 
+--> kubectl create deployment red --image=nginx --replicas=2 --dry-run=client -o yaml > red.yaml

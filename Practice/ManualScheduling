@@ -1,0 +1,21 @@
+1. A pod definition file nginx.yaml is given. Create a pod using the file.
+Only create the POD for now. We will inspect its status next.
+--> kubectl apply -f nginx.yaml
+
+2. What is the status of the created POD?
+--> kubectl get pods
+
+3. Why is the POD in a pending state?
+Inspect the environment for various kubernetes control plane components.
+--> kubectl describe pod nginx
+
+==> kubectl -n kube-system get pods
+
+4. Manually schedule the pod on node01.
+Delete and recreate the POD if necessary.
+--> 
+
+5. Now schedule the same pod on the master/controlplane node.
+Delete and recreate the POD if necessary.
+--> vi nginx.yaml
+--> kubectl apply -f nginx.yaml

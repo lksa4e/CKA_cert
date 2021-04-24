@@ -1,0 +1,51 @@
+1. We have a working kubernetes cluster with a set of applications running. Let us first explore the setup.
+How many deployments exist in the cluster?
+
+2. What is the version of ETCD running on the cluster?
+Check the ETCD Pod or Process
+--> kubectl describe pod -n kube-system etcd-controlplane
+
+3. At what address can you reach the ETCD cluster from the controlplane node?
+Check the ETCD Service configuration in the ETCD POD
+--> kubectl describe pod -n kube-system etcd-controlplane
+--> --listen-client-urls=https://127.0.0.1:2379,https://10.252.68.6:2379
+
+4. Where is the ETCD server certificate file located?
+Note this path down as you will need to use it later
+    Command:
+      etcd
+      --advertise-client-urls=https://10.252.68.6:2379
+      --cert-file=/etc/kubernetes/pki/etcd/server.crt
+
+5. Where is the ETCD CA Certificate file located?
+Note this path down as you will need to use it later.
+      --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+
+6. The master nodes in our cluster are planned for a regular maintenance reboot tonight. While we do not anticipate anything to go wrong, we are required to take the necessary backups. Take a snapshot of the ETCD database using the built-in snapshot functionality.
+Store the backup file at location /opt/snapshot-pre-boot.db
+
+ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /opt/snapshot-pre-boot.db
+
+7. Wake up! We have a conference call! After the reboot the master nodes came back online, 
+but none of our applications are accessible. Check the status of the applications on the cluster. What's wrong?
+
+
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--name=master \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+--data-dir /var/lib/etcd-from-backup \
+--initial-cluster=master=https://127.0.0.1:2379 \
+--initial-cluster-token=etcd-cluster-1 \
+--initial-advertise-peer-urls=https://127.0.0.1:2379 \
+snapshot restore /opt/snapshot-pre-boot.db
+
+etcd.yaml 파일에서 
+볼륨마운트 -> path 변경
+
+docker ps -a | grep etcd

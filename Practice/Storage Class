@@ -1,0 +1,29 @@
+kubectl get storageclasses.storage.k8s.io
+
+What is the name of the Storage Class that does not support dynamic volume provisioning?
+--> Look for the storage class name that uses no-provisioner
+
+RWO
+local-storage
+
+Why is the PVC in a pending state despite making a valid request to claim the volume called local-pv?
+Inspect the PVC events.
+
+The Storage Class called local-storage makes use of VolumeBindingMode set to WaitForFirstConsumer. 
+This will delay the binding and provisioning of a PersistentVolume until a Pod using the PersistentVolumeClaim is created.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage   <<< 여기와
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - name: task-pv-container   
+      image: nginx
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-pv-storage    <<< 여기는 같아야함

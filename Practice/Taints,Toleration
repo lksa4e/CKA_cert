@@ -1,0 +1,63 @@
+1. How many Nodes exist on the system?
+including the master/controlplane node
+--> kubectl get nodes
+--> kubectl get nodes --no-headers | wc -l
+
+2. Do any taints exist on node01?
+--> kubectl describe node node01
+--> kubectl describe node node01 | grep -i taints
+
+3. Create a taint on node01 with key of spray, value of mortein and effect of NoSchedule
+--> kubectl taint nodes node01 spray=mortein:NoSchedule
+
+4. Create a new pod with the NGINX image, and Pod name as mosquito
+--> kubectl run mosquito --image=nginx
+
+5. What is the state of the POD?
+--> kubectl get pods
+
+6. Why do you think the pod is in a pending state?
+--> kubectl describe pods
+
+7. Create another pod named bee with the NGINX image, which has a toleration set to the taint Mortein
+--> kubectl run bee --image=nginx --dry-run=client -o yaml > bee.yaml
+--> 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: bee
+  name: bee
+spec:
+  containers:
+  - image: nginx
+    name: bee
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  tolerations:
+  - key: "spray"
+    operator: "Equal"
+    value: "mortein"
+    effect: "NoSchedule"
+status: {}
+
+--> kubectl apply -f bee.yaml
+
+==> kubectl explain pod --recursive | less
+   ==> pod option 설명
+==> kubectl explain pod --recursive | grep -A5 tolerations
+
+// Pod의 Node까지 확인
+==> kubectl get pods -o wide
+
+8. Do you see any taints on master/controlplane node?
+--> kubectl describe nodes controlplane | grep -i taints
+
+9. Remove the taint on master/controlplane, which currently has the taint effect of NoSchedule
+--> kubectl describe nodes controlplane | grep -i taints
+--> kubectl taint nodes controlplane node-role.kubernetes.io/master:NoSchedule-
+
+10. What is the state of the pod mosquito now?
+--> kubectl get pods

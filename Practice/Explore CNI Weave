@@ -1,0 +1,21 @@
+1. Inspect the kubelet service and identify the network plugin configured for Kubernetes.
+--> ps -aux | grep kubelet | grep plugin
+
+2. What is the path configured with all binaries of CNI supported plugins?
+--cni-bin-dir=/opt/cni/bin
+
+3. Identify which of the below plugins is not available in the list of available CNI plugins on this host
+--> plugin 찾기 
+    1. ps -aux | grep kubelet 통해서 plugin binary directory 경로 찾기
+    2. 해당 폴더 탐색
+
+4. What is the CNI plugin configured to be used on this kubernetes cluster?
+--> kubectl get pods --all-namespaces
+     kube-system   weave-net-mf7hq                        2/2     Running   1          7m49s
+     kube-system   weave-net-tq9b9                        2/2     Running   1          7m49s
+
+==> ls /etc/cni/net.d/
+
+5. What binary executable file will be run by kubelet after a container and its associated namespace are created.
+--> Look at the type field in file /etc/cni/net.d/10-weave.conflist
+==> /etc/cni/net.d/ ==> CNI configuration에 대한 정보 담겨있는 폴더

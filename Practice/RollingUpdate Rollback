@@ -1,0 +1,29 @@
+1. Run the script named curl-test.sh to send multiple requests to test the web application. Take a note of the output.
+Execute the script at /root/curl-test.sh.
+--> sh curl-test.sh
+Hello, Application Version: v1 ; Color: blue OK
+
+2. Inspect the deployment and identify the current strategy
+--> kubectl describe deployment frontend
+
+3. If you were to upgrade the application now what would happen?
+--> PODs are upgraded few at a time
+
+4. Let us try that. Upgrade the application by setting the image on the deployment to kodekloud/webapp-color:v2
+Do not delete and re-create the deployment. Only set the new image name for the existing deployment.
+--> kubectl set image deployment/frontend simple-webapp=kodekloud/webapp-color:v2
+--> kubectl edit deployment frontend
+
+5. Run the script curl-test.sh again. Notice the requests now hit both the old and newer versions. However none of them fail.
+Execute the script at /root/curl-test.sh.
+
+6. Up to how many PODs can be down for upgrade at a time
+Consider the current strategy settings and number of PODs - 4
+--> 1
+
+7. Change the deployment strategy to Recreate
+Do not delete and re-create the deployment. Only update the strategy type for the existing deployment.
+
+8. Upgrade the application by setting the image on the deployment to kodekloud/webapp-color:v3
+Do not delete and re-create the deployment. Only set the new image name for the existing deployment.
+

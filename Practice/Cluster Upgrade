@@ -1,0 +1,16 @@
+1. We will be upgrading the master node first. Drain the master node of workloads and mark it UnSchedulable
+--> kubectl drain controlplane --ignore-daemonsets
+
+2. Upgrade the master/controlplane components to exact version v1.19.0
+Upgrade kubeadm tool (if not already), then the master components, and finally the kubelet. 
+Practice referring to the kubernetes documentation page. 
+Note: While upgrading kubelet, if you hit dependency issue while running the apt-get upgrade kubelet command, 
+use the apt install kubelet=1.19.0-00 command instead
+
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.19.0-00 && \
+apt-mark hold kubeadm
+
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.19.0-00 kubectl=1.19.0-00 && \
+apt-mark hold kubelet kubectl

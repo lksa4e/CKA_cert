@@ -1,0 +1,59 @@
+1. Identify the DNS solution implemented in this cluster.
+--> kubectl get pods --all-namespaces
+
+2. What is the name of the service created for accessing CoreDNS?
+--> kubectl get svc --all-namespaces
+
+3. What is the IP of the CoreDNS server that should be configured on PODs to resolve services?
+--> kubectl get svc --all-namespaces
+--> kube-system   kube-dns       ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP   6m52s
+
+4. Where is the configuration file located for configuring the CoreDNS service?
+--> kubectl -n kube-system describe deployments.apps coredns
+Args:
+      -conf
+      /etc/coredns/Corefile
+
+5. How is the Corefile passed in to the CoreDNS POD?
+--> configmap
+Volumes:
+   config-volume:
+    Type:               ConfigMap (a volume populated by a ConfigMap)
+    Name:               coredns
+    Optional:           false
+
+6. What is the name of the ConfigMap object created for Corefile?
+
+7. What is the root domain/zone configured for this kubernetes cluster?
+--> kubectl describe configmap coredns -n kube-system
+kubernetes cluster.local in-addr.arpa ip6.arpa {
+       pods insecure
+       fallthrough in-addr.arpa ip6.arpa
+       ttl 30
+    }
+
+8. What name can be used to access the hr web server from the test Application?
+You can execute a curl command on the test pod to test. Alternatively, the test Application also has a UI. 
+Access it using the tab at the top of your terminal named"test-app"
+--> web-service
+
+9. Which of the names CANNOT be used to access the HR service from the test pod?
+--> web-service.pod
+
+10. Which of the below name can be used to access the payroll service from the test application?
+--> web-service.payroll
+
+11. Which of the below name CANNOT be used to access the payroll service from the test application?
+--> web-service.payroll.local  (중간이 생략되면 안됨)
+
+12. We just deployed a web server - webapp - that accesses a database mysql - server. 
+However the web server is failing to connect to the database server. Troubleshoot and fix the issue.
+
+They could be in different namespaces. First locate the appliations.
+The web server interface can be seen by clicking the tab Web Server at the top of your terminal.
+--> 웹앱을 봤더니 이미 user,랑이 하드코딩으로 되어있다.
+describe deployment 해보니까 env에 이미 값이 입력되어있음 ! --> dns 쪽을 확인하기보다는 env 입력값을 바꿔주는게 맞는듯
+DB_HOST를 mysql -> mysql.payroll로 변경
+
+14. From the hr pod nslookup the mysql service and redirect the output to a file /root/CKA/nslookup.out
+--> kubectl exec -it hr -- nslookup mysql.payroll > /root/CKA/nslookup.out

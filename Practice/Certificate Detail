@@ -1,0 +1,58 @@
+1. Identify the certificate file used for the kube-api server
+--> kubectl -n kube-system describe pod kube-apiserver-controlplane
+     --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
+
+2. Identify the Certificate file used to authenticate kube-apiserver as a client to ETCD Server
+  --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt
+
+3. Identify the key used to authenticate kubeapi-server to the kubelet server
+   --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
+
+4. Identify the ETCD Server Certificate used to host ETCD server
+--> kubectl -n kube-system describe pod etcd-controlplane
+   --cert-file=/etc/kubernetes/pki/etcd/server.crt
+
+5. Identify the ETCD Server CA Root Certificate used to serve ETCD Server
+ETCD can have its own CA. So this may be a different CA certificate than the one used by kube-api server.
+   --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+
+6. What is the Common Name (CN) configured on the Kube API Server Certificate?
+OpenSSL Syntax: openssl x509 -in file-path.crt -text -noout
+--> openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+    Subject: CN = kube-apiserver
+
+7. What is the name of the CA who issued the Kube API Server Certificate?
+--> openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+    Issuer: CN = kubernetes
+8. Which of the below alternate names is not configured on the Kube API Server Certificate?
+--> X509v3 Subject Alternative Name: 
+                DNS:controlplane, DNS:kubernetes, DNS:kubernetes.default, DNS:kubernetes.default.svc, 
+                DNS:kubernetes.default.svc.cluster.local, IP Address:10.96.0.1, IP Address:172.17.0.17
+
+9. What is the Common Name (CN) configured on the ETCD Server certificate?
+--> openssl x509 -in /etc/kubernetes/pki/etcd/server.crt -text -noout
+
+10. How long, from the issued date, is the Root CA Certificate valid for?
+File: /etc/kubernetes/pki/ca.crt
+--> openssl x509 -in /etc/kubernetes/pki/ca.crt -text -noout
+
+ Validity
+            Not Before: Apr 21 13:06:33 2021 GMT
+            Not After : Apr 19 13:06:33 2031 GMT
+
+11. Kubectl suddenly stops responding to your commands. Check it out! 
+Someone recently modified the /etc/kubernetes/manifests/etcd.yaml file
+You are asked to investigate and fix the issue. Once you fix the issue wait for sometime for kubectl to respond. 
+Check the logs of the ETCD container.
+
+--> 
+
+12. The kube-api server stopped again! Check it out. Inspect the kube-api server logs and identify the root cause and fix the issue.
+Run docker ps -a command to identify the kube-api server container. Run docker logs container-id command to view the logs.
+
+W0421 13:40:43.162528       1 clientconn.go:1208] grpc: addrConn.createTransport failed to connect to 
+{https://127.0.0.1:2379  <nil> 0 <nil>}. Err :connection error: desc = "transport: authentication handshake failed: 
+x509: certificate signed by unknown authority". Reconnecting...
+
+ETCD has its own CA. The right CA must be used for the ETCD-CA file in /etc/kubernetes/manifests/kube-apiserver.yaml
+

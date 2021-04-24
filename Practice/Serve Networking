@@ -1,0 +1,29 @@
+1. What network range are the nodes in the cluster part of?
+--> ip addr 
+ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 02:42:ac:11:00:39 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.57/16 brd 172.17.255.255 scope global ens3
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe11:39/64 scope link 
+       valid_lft forever preferred_lft forever
+ 2. What is the range of IP addresses configured for PODs on this cluster?
+ --> ip addr  
+ --> kubectl -n kube-system logs weave 
+ ==> The network is configured with weave. Check the weave pods logs using command kubectl logs <weave-pod-name> 
+ weave -n kube-system and look for ipalloc-range
+INFO: 2021/04/24 11:22:50.598646 Command line options: map[conn-limit:200 datapath:datapath db-prefix:/weavedb/weave-net docker-api: 
+expect-npc:true http-addr:127.0.0.1:6784 ipalloc-init:consensus=1 ipalloc-range:10.32.0.0/12 metrics-addr:0.0.0.0:6782 
+name:62:8a:4f:45:b7:ea nickname:node01 no-dns:true no-masq-local:true port:6783]
+
+3. What is the IP Range configured for the services within the cluster?
+==> 서비스의 ip range를 확인하는 방법
+    ==> /etc/kubernetes/manifests 의 api 서버 파일 확인
+--> cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+--service-cluster-ip-range=10.96.0.0/12
+
+4. What type(proxy mode) of proxy is the kube-proxy configured to use?
+--> kubectl logs kube-proxy-dkfrb -n kube-system
+
+5. How does this Kubernetes cluster ensure that a kube-proxy pod runs on all nodes in the cluster?
+Inspect the kube-proxy pods and try to identify how they are deployed
+--> Controlled By:  DaemonSet/kube-proxy

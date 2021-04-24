@@ -1,0 +1,82 @@
+1. How many pods exist on the system?
+--> kubectl get pods
+
+2. create a new pod with the nginx image. (image name: nginx)
+--> kubectl run nginx --image nginx 
+
+3. What is the image used to create the new pods?
+You must look at one of the new pods in detail to figure this out.
+--> kubectl get pod <pod name>
+--> kubectl get pods
+
+--> kubectl get pod <pod name> | grep -i image ==> image 잡아서 보기
+
+4. Which nodes are these pods placed on?
+You must look at all the pods in detail to figure this out.
+--> kubectl get pods
+
+--> kubectl get pods -o wide ==> Node까지 보여줌
+
+5. How many containers are part of the pod webapp?
+Note: We just created a new POD. Ignore the state of the POD for now.
+--> kubectl get pod webapp
+
+--> kubectl get pods webapp ==> 1/2 상태를 통해
+
+6. What images are used in the new webapp pod?
+You must look at all the pods in detail to figure this out.
+--> kubectl get pod webapp
+
+7. What is the state of the container 'agentx' in the pod 'webapp'?
+Wait for it to finish the 'ContainerCreating' state
+--> kubectl get pod webapp
+
+8. Why do you think the container agentx in pod webapp is in error?
+Try to figure it out from the events section of the pod.
+--> kubectl get pod webapp
+--> ImgaePullBackOff --> docker image 가 없어서 ImagePullBackOff 가 발생했다.
+
+9. What does the READY column in the output of the kubectl get pods command indicate?
+--> Running Containers in POD/Total Containers in pod
+
+10. Delete the webapp Pod.
+Once deleted, wait for the pod to fully terminate.
+--> kubectl delete pod <pod name>
+
+11. Create a new pod with the name redis and with the image redis123.
+Use a pod-definition YAML file. And yes the image name is wrong!
+--> kubectl run redis --image redis123
+
+==> kubectl run redis --image=redis123 --dry-run=client -o yaml > pods.yaml
+==> pods.yaml이 생성됨, 항목들 자동 입력,, 수정할 것들 vi pods.yaml 통해 수정
+==> kubectl apply -f pod.yaml
+
+kubectl create --dry-run -o yaml라는 kubectl 커맨드를 통해 다음과 같은 리소스를 생성할 수 있다.
+
+clusterrole: 클러스터롤(ClusterRole)을 생성한다.
+clusterrolebinding: 특정 클러스터롤에 대한 클러스터롤바인딩(ClusterRoleBinding)을 생성한다.
+configmap: 로컬 파일, 디렉토리 또는 문자 그대로의 값으로 컨피그맵(ConfigMap)을 생성한다.
+cronjob: 지정된 이름으로 크론잡(CronJob)을 생성한다.
+deployment: 지정된 이름으로 디플로이먼트(Deployment)를 생성한다.
+job: 지정된 이름으로 잡(Job)을 생성한다.
+namespace: 지정된 이름으로 네임스페이스(Namespace)를 생성한다.
+poddisruptionbudget: 지정된 이름으로 PodDisruptionBudget을 생성한다.
+priorityclass: 지정된 이름으로 프라이어리티클래스(PriorityClass)을 생성한다.
+quota: 지정된 이름으로 쿼터(Quota)를 생성한다.
+role: 단일 규칙으로 롤(Role)을 생성한다.
+rolebinding: 특정 롤 또는 클러스터롤에 대한 롤바인딩(RoleBinding)을 생성한다.
+secret: 지정된 하위 커맨드를 사용하여 시크릿(Secret)을 생성한다.
+service: 지정된 하위 커맨드를 사용하여 서비스(Service)를 생성한다.
+serviceaccount: 지정된 이름으로 서비스어카운트(ServiceAccount)을 생성한다
+
+
+12. Now change the image on this pod to redis.
+Once done, the pod should be in a running state.
+--> kubectl edit pod <pod name> ==> pod 속성 edit
+
+--> kubectl apply --prune -f manifest.yaml -l app=nginx
+
+==> vi pods.yaml // kubectl apply -f pod.yaml
+
+Use the kubectl edit command to update the image of the pod to redis.
+If you used a pod definition file, update the image from redis123 to redis in the file and then run kubectl apply.

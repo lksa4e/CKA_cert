@@ -1,0 +1,68 @@
+1. What is the network interface configured for cluster connectivity on the master node?
+(node-to-node communication)
+--> Run the 'ip link' command and identify the interface
+--> ifconfig -a
+--> cat /etc/network/interfaces <-- ubuntu 적용
+
+ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 02:42:ac:11:00:13 brd ff:ff:ff:ff:ff:ff
+
+
+2. What is the IP address assigned to the master node on this interface?
+--> ip addr
+ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 02:42:ac:11:00:08 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.8/16 brd 172.17.255.255 scope global ens3
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe11:8/64 scope link 
+       valid_lft forever preferred_lft forever
+--> Run the command kubectl get nodes -o wide and look for IP assigned to master node
+   172.17.0.8
+
+3. What is the MAC address of the interface on the master node?
+
+4. Master의 Mac address 
+--> link/ether 02:42:ac:11:00:08 brd ff:ff:ff:ff:ff:ff
+
+5. What is the IP / MAC address assigned to node01? ( ip : 172.17.0.12)
+--> ssh node01 ifconfig ens3
+
+--> Run the command arp node01 on the master node
+--> arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+node01                   ether   02:42:ac:11:00:0c   C                     ens3
+
+6. We use Docker as our container runtime. What is the interface/bridge created by Docker on this host?
+--> docker0
+
+7. What is the state of the interface docker0?
+--> ip link show docker0
+--> ip addr show docker0
+docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+    link/ether 02:42:1d:e8:88:42 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/24 brd 172.18.0.255 scope global docker0
+       valid_lft forever preferred_lft forever
+
+8. If you were to ping google from the master node, which route does it take?
+What is the IP address of the Default Gateway?
+--> ip route 
+default via 172.17.0.1 dev ens3
+
+9. What is the port the kube-scheduler is listening on in the master node?
+--> netstat -nplt
+--> netstat -natulp | grep kube-scheduler
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.1:10259         0.0.0.0:*               LISTEN      2280/kube-scheduler
+tcp6       0      0 :::10251                :::*                    LISTEN      2280/kube-scheduler
+
+--> 10251
+
+10. Notice that ETCD is listening on two ports. Which of these have more client connections established?
+--> netstat -nplt | grep etcd | grep LISTEN
+tcp        0      0 172.17.0.8:2379         0.0.0.0:*               LISTEN      2220/etcd           
+tcp        0      0 127.0.0.1:2379          0.0.0.0:*               LISTEN      2220/etcd           
+tcp        0      0 172.17.0.8:2380         0.0.0.0:*               LISTEN      2220/etcd           
+tcp        0      0 127.0.0.1:2381          0.0.0.0:*               LISTEN      2220/etcd
+
+Correct! That's because 2379 is the port of ETCD to which all control plane components connect to. 
+2380 is only for etcd peer-to-peer connectivity. When you have multiple master nodes. In this case we don't.

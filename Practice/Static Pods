@@ -1,0 +1,55 @@
+1. How many static pods exist in this cluster in all namespaces?
+--> kubectl get pods --all-namespaces
+==> kubectl get pods --all-namespaces | grep "\-controlplane"
+
+2. Which of the below components is NOT deployed as a static pod?
+--> controlplane이 안붙은 거 
+
+3. On which nodes are the static pods created currently?
+--> kubectl get pods --all-namespaces -o wide
+
+4. What is the path of the directory holding the static pod definition files?
+==> ps -aux | grep kubelet
+==> cat /var/lib/kubelet/config.yaml
+
+==> ps -ef | grep kubelet
+==> grep -i static/var/lib/kubelet/config.yaml
+
+
+5. How many pod definition files are present in the manifests folder?
+--> cd /etc/kubernetes/manifests
+
+6. What is the docker image used to deploy the kube-api server as a static pod?
+--> cat kube-apiserver.yaml
+
+7. Create a static pod named static-busybox that uses the busybox image and the command sleep 1000
+--> kubectl run static-busybox --image=busybox --command sleep 1000 --restart=Never --dry-run=client -o yaml > static-busybox.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: static-busybox
+  name: static-busybox
+spec:
+  containers:
+  - image: busybox
+    name: static-busybox
+    command: ['sh', '-c',"sleep 1000"]
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+~                              
+
+8. We just created a new static pod named static-greenbox. Find it and delete it.
+This question is a bit tricky. But if you use the knowledge you gained in the previous questions in this lab, 
+you should be able to find the answer to it.
+--> SSH로 Node01에 접속해야함
+--> kubectl get nodes node01 -o wide
+--> ssh <ip>
+--> ps -aux | grep kubelet
+--> cd, rm yaml file
+--> exit
+
+==> ps -ef | grep kubelet | grep "\--config"
+==> grep -i static /var/...경로

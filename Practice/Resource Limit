@@ -1,0 +1,17 @@
+1. A pod named rabbit is deployed. Identify the CPU requirements set on the Pod
+in the current(default) namespace
+--> kubectl describe pods rabbit
+
+2. Delete the rabbit Pod.
+Once deleted, wait for the pod to fully terminate.
+--> kubectl delete pod rabbit
+
+3. Inspect the pod elephant and identify the status.
+--> kubectl desbribe pod elephant
+--> OOMKilled (The status OOMKilled indicates that the pod ran out of memory. Identify the memory limit set on the POD)
+
+4. The elephant pod runs a process that consume 15Mi of memory. Increase the limit of the elephant pod to 20Mi.
+Delete and recreate the pod if required. Do not modify anything other than the required fields.
+--> kubectl get pod elephant -o yaml > my.yaml
+--> kubectl delete pod elephant
+--> kubectl apply -f my.yaml

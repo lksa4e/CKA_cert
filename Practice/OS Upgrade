@@ -1,0 +1,21 @@
+1. Let us explore the environment first. How many nodes do you see in the cluster?
+--> kubectl get nodes
+
+2. How many applications do you see hosted on the cluster?
+Check the number of deployments
+--> kubectl get deployments
+
+3.On which nodes are the applications hosted on?
+--> kubectl get pods -o wide
+
+4. We need to take node01 out for maintenance. Empty the node of all applications and mark it unschedulable.
+--> kubectl drain node01 --ignore-daemonsets
+
+5. The maintenance tasks have been completed. Configure the node to be schedulable again.
+--> kubectl uncordon node01
+
+6. RS, Daemonset, deployment, Job 등에 의해 생성되지 않은 Pod는 단순 drain으로는 evict 할 수 없음
+--> kubectl drain node02 --ignore-daemonsets --force
+
+7. 단순하게 스케쥴링되지 않게만
+--> kubectl cordon node03

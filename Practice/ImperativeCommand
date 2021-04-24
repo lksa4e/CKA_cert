@@ -1,0 +1,41 @@
+1. Deploy a pod named nginx-pod using the nginx:alpine image.
+Use imperative commands only.
+--> kubectl run nignx-pod --image=nginx:alpine
+
+2. Deploy a redis pod using the redis:alpine image with the labels set to tier=db.
+Either use imperative commands to create the pod with the labels. Or else use imperative commands to generate the pod definition file,
+then add the labels before creating the pod using the file.
+--> kubectl run redis --image=redis:alpine --labels="tier=db"
+
+3. Create a service redis-service to expose the redis application within the cluster on port 6379.
+Use imperative commands.
+--> kubectl expose pod redis --port=6379 --name=redis-service
+==>  kubectl expose pod redis --port=6379 --name=redis-service --target-port=6379
+
+4. Create a deployment named webapp using the image kodekloud/webapp-color with 3 replicas.
+Try to use imperative commands only. Do not create definition files.
+--> kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3
+
+==> kubectl create deployment webapp --image=kodekloud/webapp-color
+==> kubectl scale deployment webapp --replicase=3
+
+5. Create a new pod called custom-nginx using the nginx image and expose it on container port 8080.
+--> kubectl run custom-nginx --image=nginx --port=8080
+--> kubectl expose pod custom-nginx --port=8080
+
+6. Create a new namespace called dev-ns.
+Use imperative commands.
+--> kubectl create ns dev-ns
+
+7. Create a new deployment called redis-deploy in the dev-ns namespace with the redis image. It should have 2 replicas.
+Use imperative commands.
+--> kubectl create deployment redis-deploy --image=redis --namespace=dev-ns --replicas=2
+
+8. Create a pod called httpd using the image httpd:alpine in the default namespace. 
+Next, create a service of type ClusterIP by the same name (httpd). The target port for the service should be 80.
+Try to do this with as few steps as possible.
+--> kubectl run httpd --image=httpd:alpine --port=80
+--> kubectl expose pod httpd --port=80
+
+==> kubectl run httpd --image=httpd:alpine --port=80 --expose
+ ==> Service와 Pods를 동시에 만듬

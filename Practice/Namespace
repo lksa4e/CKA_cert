@@ -1,0 +1,33 @@
+1. How many Namespaces exist on the system?
+--> kubectl get namespaces
+--> kubectl get ns
+
+==> kubectl get ns --no-headers | wc -l
+    wc == wordcount
+
+2. How many pods exist in the research namespace?
+--> kubectl get pods --namespace=research
+==> kubectl -n research get pods --no-headers
+             name
+
+3. Create a POD in the finance namespace.
+Use the spec given below. (Name: redis, Image Name: redis)
+--> kubectl run redis --image=redis --namespace=finance
+==> kubectl run redis --image=redis --dry-run=client -o yaml > pod.yaml
+==> metadata에 namespace 추가
+==> kubectl apply -f pod.yaml
+
+4. Which namespace has the blue pod in it?
+--> kubectl get pods --all-namespaces
+
+5. Access the Blue web application using the link above your terminal
+From the UI you can ping other services
+
+6. What DNS name should the Blue application use to access the database db-service in its own namespace - marketing.
+You can try it in the web application UI. Use port 3306.
+--> db-service (같은 namespace여서 별도의 이름 지정 x)
+
+7. What DNS name should the Blue application use to access the database 'db-service' in the 'dev' namespace
+You can try it in the web application UI. Use port 3306.
+--> db-service.dev.svc.cluster.local
+

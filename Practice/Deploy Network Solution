@@ -1,0 +1,2 @@
+1. Deploy weave-net networking solution to the cluster
+--> k8s docs ==> bootstrapping clusters with kubeadm

@@ -1,0 +1,10 @@
+1. deployment에 사용된 imgae name?
+--> kubectl describe deployment <deployment name> | grep -i image
+
+2. Create a new Deployment with the below attributes using your own deployment definition file.
+Name: httpd-frontend;
+Replicas: 3;
+Image: httpd:2.4-alpine
+
+==> kubectl create deployment httpd-frontend --image=httpd:2.4-alpine
+==> kubectl create deployment httpd-frontend --image=httpd:2.4-alpine --dry-run -o yaml > my1.yaml

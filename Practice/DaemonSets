@@ -1,0 +1,19 @@
+1. How many DaemonSets are created in the cluster in all namespaces?
+Check all namespaces
+--> kubectl get daemonsets --no-headers --all-namespaces | wc -l
+--> kubectl get daemonsets --all-namespaces
+
+2. Which namespace are the DaemonSets created in?
+--> kubectl get daemonsets --all-namespaces
+
+3. On how many nodes are the pods scheduled by the DaemonSet kube-proxy
+--> kubectl get pods --all-namespaces | grep -i kube-proxy
+
+4. What is the image used by the POD deployed by the kube-flannel-ds DaemonSet?
+--> kubectl describe daemonsets --all-namespaces
+
+5. Deploy a DaemonSet for FluentD Logging.
+Use the given specifications.
+--> kubectl create deployment elasticsearch -n kube-system --image=k8s.gcr.io/fluentd-elasticsearch:1.20 --dry-run=client -o yaml > my.yaml
+
+

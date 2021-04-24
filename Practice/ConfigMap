@@ -1,0 +1,22 @@
+1. What is the environment variable name set on the container in the pod?
+--> kubectl describe pod
+
+2. What is the value set on the environment variable APP_COLOR on the container in the pod?
+--> kubectl describe pod
+
+3. How many ConfigMaps exist in the environment?
+--> kubectl get configmaps
+
+4. Identify the database host from the config map db-config
+--> kubectl describe configmaps db-config
+
+kubectl get pod webapp-color -o yaml > pod.yaml
+
+5. Create a new ConfigMap for the webapp-color POD. Use the spec given below.
+ConfigName Name: webapp-config-map
+Data: APP_COLOR=darkblue
+
+-->kubectl create configmap --dry-run=client -o yaml > webapp-config-map.yaml
+
+kubectl explain pods --reculsive | grep envFrom -A3
+6. 

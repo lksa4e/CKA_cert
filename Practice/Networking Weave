@@ -1,0 +1,29 @@
+1. How many Nodes are part of this cluster?
+Including master and worker nodes
+
+
+2. How many weave agents/peers are deployed in this cluster?
+
+3. On which nodes are the weave peers present?
+--> kubectl get pods --all-namespaces  -o wide
+
+4. Identify the name of the bridge network/interface created by weave on each node
+--> ip link
+==6: weave: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1376 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 06:a9:f6:0f:2d:d6 brd ff:ff:ff:ff:ff:ff
+
+5. What is the POD IP address range configured by weave?
+weave: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1376 qdisc noqueue state UP group default qlen 1000
+    link/ether 06:a9:f6:0f:2d:d6 brd ff:ff:ff:ff:ff:ff
+    inet 10.34.0.0/12 brd 10.47.255.255 scope global weave
+       valid_lft forever preferred_lft forever
+    inet6 fe80::4a9:f6ff:fe0f:2dd6/64 scope link
+
+6. What is the default gateway configured on the PODs scheduled on node03?
+Try scheduling a pod on node03 and check ip route output
+--> kubectl run busybox --image=busybox --command sleep 1000 --dry-run=client -o yaml > pod.yaml
+    vi pod.yaml 
+    spec의 nodeName: node03
+    kubectl exec -it busybox -- busybox
+    ip route (in node03 container)
+== default via 10.40.0.0 dev eth0

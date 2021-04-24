@@ -1,0 +1,13 @@
+1. What is the name of the POD that deploys the default kubernetes scheduler in this environment?
+--> kubectl get pods --all-namespaces
+
+2. What is the image used to deploy the kubernetes scheduler?
+Inspect the kubernetes scheduler pod and identify the image
+--> kubectl describe pod -n kube-system kube-scheduler-controlplane
+
+3. Deploy an additional scheduler to the cluster following the given specification.
+Use the manifest file used by kubeadm tool. Use a different port than the one used by the current one.
+--> 
+
+4. A POD definition file is given. Use it to create a POD with the new custom scheduler.
+--> pod definition file의 spec에 schedulerName: 추가

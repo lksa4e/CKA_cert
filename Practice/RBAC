@@ -1,0 +1,81 @@
+1. Inspect the environment and identify the authorization modes configured on the cluster.
+Check the kube-api server settings
+--> cat /etc/kubernetes/manifests/kube-api-server.yaml
+--> kubectl -n kube-system describe pods kube-apiserver-controlplane
+
+2. how many roles in default namespace
+kubectl get roles
+
+3. How many roles exist in all namespaces together?
+--> kubectl get roles --all-namespaces
+
+4. What are the resources the kube-proxy role in the kube-system namespce is given access to?
+--> kubectl -n kube-system describe role kube-proxy
+
+5. Which account is the kube-proxy role assigned to it?
+--> kubectl describe rolebinding -n kube-system
+    Group: system:bootstrappers:kubeadm:default-node-token
+
+6. A user dev-user is created. User's details have been added to the kubeconfig file. 
+Inspect the permissions granted to the user. Check if the user can list pods in the default namespace.
+Use the --as dev-user option with kubectl to run commands as the dev-user
+--> kubectl get pods --as dev-user
+
+7. Create the necessary roles and role bindings required for the dev-user to create, list and delete pods in the default namespace.
+Use the given spec (Role: developer
+Role Resources: pods
+Role Actions: list
+Role Actions: create
+RoleBinding: dev-user-binding
+RoleBinding: Bound to dev-user)
+
+8. The dev-user is trying to get details about the dark-blue-app pod in the blue namespace. Investigate and fix the issue.
+We have created the required roles and rolebindings, but something seems to be wrong.
+
+9. Grant the dev-user permissions to create deployments in the blue namespace.
+Remember to add both groups "apps" and "extensions"
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: blue
+  name: deploy-role
+rules:
+- apiGroups: ["apps", "extensions"]
+  resources: ["deployments"]
+  verbs: ["create"]
+
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dev-user-deploy-binding
+  namespace: blue
+subjects:
+- kind: User
+  name: dev-user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: deploy-role
+  apiGroup: rbac.authorization.k8s.iocontrolplane
+
+---------------------------------------------------------
+ClusterRole
+
+---------------------------------------------------------
+
+A new user michelle joined the team. She will be focusing on the nodes in the cluster. 
+Create the required ClusterRoles and ClusterRoleBindings so she gets access to the nodes.
+michelle-Clusterrole
+
+
+michelle's responsibilities are growing and now she will be responsible for storage as well. 
+Create the required ClusterRoles and ClusterRoleBindings to allow her access to Storage.
+Get the API groups and resource names from command kubectl api-resources. Use the given spec.
+(ClusterRole: storage-admin
+Resource: persistentvolumes
+Resource: storageclasses
+
+ClusterRoleBinding: michelle-storage-admin
+ClusterRoleBinding Subject: michelle
+ClusterRoleBinding Role: storage-admin)
