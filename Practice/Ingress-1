@@ -40,3 +40,5 @@ Identify the namespace in which the new application is deployed (critical-space)
 9. You are requested to make the new application available at /pay.
 Identify and implement the best approach to making this application available on the ingress controller 
 and test to make sure its working. Look into annotations: rewrite-target as well.
+
+--> 다음 테스트할때는 dns 검색해서 / 이전에 있는 dns가 뭔지 확인해보자!
