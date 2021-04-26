@@ -7,13 +7,13 @@
 5. Understand how resource limits can affect Pod scheduling
 6. Awareness of manifest management and common templating tools
 
-deployment - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-Configmap - https://kubernetes.io/docs/concepts/configuration/configmap/
-Secret - https://kubernetes.io/docs/concepts/configuration/secret/
-Scale Application - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application
-robust, self-healing, application deployment - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/ , https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-Resource Limit - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-Manifest management, common templating tool - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/ , https://kubernetes.io/docs/tasks/manage-kubernetes-objects/
+deployment - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/ <br>
+Configmap - https://kubernetes.io/docs/concepts/configuration/configmap/ <br>
+Secret - https://kubernetes.io/docs/concepts/configuration/secret/ <br>
+Scale Application - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application <br>
+robust, self-healing, application deployment - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/ , https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ <br>
+Resource Limit - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ <br>
+Manifest management, common templating tool - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/ , https://kubernetes.io/docs/tasks/manage-kubernetes-objects/ <br>
 
 Deployments는 Replication Controller를 대체하기 위한 것입니다. 동일한 복제 기능(Replica Sets를 통한)과 변경 사항을 롤아웃하고 필요한 경우 롤백하는 기능도 제공합니다.
 
@@ -480,3 +480,5 @@ Alternatively, variables can be declared by using `--set`, such as:
 ```shell
 helm install my-release --set auth.rootPassword=secretpassword bitnami/mariadb
 ```
+
+참고 : https://github.com/David-VTUK/CKA-StudyGuide/blob/master/RevisionTopics/02-Workloads%20%26%20Scheduling.md
