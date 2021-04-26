@@ -1,0 +1,127 @@
+1. namespace 만들기
+2. Configmap 만들기 (Namespace 안에서)
+3. ServiceAccount 만들기 
+4. Service Account를 위한 Role, Rolebinding 만들기
+5. Ingress Controller Deployment 만들기
+6. Service 만들기 (App의 서비스 X -> ingress Controller 를 위한 NodePort 서비스 )
+7. ingress resource 만들기 
+
+1. Let us now deploy an Ingress Controller. First, create a namespace called 'ingress-space'
+We will isolate all ingress related objects into its own namespace.
+--> kubectl create ns ingress-space
+
+2. The NGINX Ingress Controller requires a ConfigMap object. Create a ConfigMap object in the ingress-space.
+Use the given spec on the right. No data needs to be configured in the ConfigMap.
+(Name: nginx-configuration)
+--> kubectl create configmap nginx-configuration -n ingress-space
+
+3. The NGINX Ingress Controller requires a ServiceAccount. Create a ServiceAccount in the ingress-space.
+Use the given spec on the right.
+--> kubectl create serviceaccount ingress-serviceaccount -n ingress-space
+
+4. note that Role과 Rolebinding이 필요하다.
+
+5. Let us now deploy the Ingress Controller. Create a deployment using the file given.
+The Deployment configuration is given at /root/ingress-controller.yaml. There are several issues with it. Try to fix them.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-controller
+  namespace: ingress-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nginx-ingress
+  template:
+    metadata:
+      labels:
+        name: nginx-ingress
+    spec:
+      serviceAccountName: ingress-serviceaccount
+      containers:
+        - name: nginx-ingress-controller
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.21.0
+          args:
+            - /nginx-ingress-controller
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --default-backend-service=app-space/default-http-backend
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+
+6. Let us now create a service to make Ingress available to external users.
+Create a service following the given specs.
+(Name: ingress
+Type: NodePort
+Port: 80
+TargetPort: 80
+NodePort: 30080
+Use the right selector)
+--> kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --port=80 \
+--name=ingress --dry-run -o yaml >ingress.yaml
+--> 먼저 deployment를 expose 시킨 후 k8s docs 참고해서 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: ingress
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30080
+  selector:
+    name: nginx-ingress
+status:
+  loadBalancer: {}
+
+  7. Create the ingress resource to make the applications available at /wear and /watch on the Ingress service.
+Create the ingress in the app-space
+(Ingress Created
+Path: /wear
+Path: /watch
+Configure correct backend service for /wear
+Configure correct backend service for /watch
+Configure correct backend port for /wear service
+Configure correct backend port for /watch service)
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-2
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /wear
+        pathType: Prefix
+        backend:
+          service:
+            name: wear-service
+            port:
+              number: 8080
+      - path: /watch
+        pathType: Prefix
+        backend:
+          service:
+            name: video-service
+            port:
+              number: 8080
+~                            
