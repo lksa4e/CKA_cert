@@ -1,5 +1,5 @@
 # Understand storage classes, persistent volumes
-Storage Class - https://kubernetes.io/docs/concepts/storage/storage-classes/
+Storage Class - https://kubernetes.io/docs/concepts/storage/storage-classes/ <br>
 Persistent Volume - https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
 
