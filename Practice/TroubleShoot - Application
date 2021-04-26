@@ -1,0 +1,61 @@
+웹 서버 어플리케이션에 문제가 생긴 경우
+1. curl 명령어를 사용해서 접속이 되는지 확인 
+--> curl http://web-service-ip:node-port
+2. Service를 체크 (Pod의 label과 service의 selector가 일치하는지 확인)
+--> kubectl describe svc web-service
+3. pod 의 status, log를 검사 
+--> kubectl describe pod web
+--> kubectl logs web -f --previous
+4. DB 서비스 체크
+5. DB pod 검사
+
+---------------------------------------
+Troubleshooting Test 1: A simple 2 tier application is deployed in the alpha namespace. 
+It must display a green web page on success. Click on the app tab at the top of your terminal to view your application.
+ It is currently failed. Troubleshoot and fix the issue.
+Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. 
+Feel free to edit, delete or recreate objects as necessary.
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/mysql         ClusterIP   10.96.32.8      <none>        3306/TCP         25s
+service/web-service   NodePort    10.99.215.162   <none>        8080:30081/TCP   25s
+
+----------------------------------------
+Troubleshooting Test 2: The same 2 tier application is deployed in the beta namespace. 
+It must display a green web page on success. Click on the app tab at the top of your terminal to view your application. 
+It is currently failed. Troubleshoot and fix the issue.
+
+Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. 
+Feel free to edit, delete or recreate objects as necessary.
+--> connection refuse 문제
+    service check
+
+--------------------------------------------
+Troubleshooting Test 3: The same 2 tier application is deployed in the gamma namespace. 
+It must display a green web page on success. Click on the app tab at the top of your terminal to view your application. 
+It is currently failed. Troubleshoot and fix the issue.
+
+Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. 
+Feel free to edit, delete or recreate objects as necessary.
+
+name=sql00001
+name=mysql
+name=webapp-mysql
+
+--------------------------------------
+delta namespace 
+access denied
+
+-------------------------------------
+epsilon namespace
+Access denied
+
+  - env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: passwooooorrddd
+
+--------------------------------------
+zeta namespace
+502 bad gateway
+--> Nodeport 문제일 확률 업
+
