@@ -1,4 +1,10 @@
 # Understand storage classes, persistent volumes
+## Agenda
+1. Understand Storage Classess, Persistent volume
+2. Understand volume mode, access modes and reclaim policies for volumes
+3. Understand persistent volume claims primitive
+4. Know how to configure applications with persistent storage
+
 Storage Class - https://kubernetes.io/docs/concepts/storage/storage-classes/ <br>
 Persistent Volume - https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
