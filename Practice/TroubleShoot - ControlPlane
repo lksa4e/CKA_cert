@@ -1,0 +1,34 @@
+1. Node check
+2. control plane pod 검사 kube-system namespace 컴퍼넌트 체크
+3. control plane service 검사(api server, 스케쥴러, 컨트롤러 매니저)
+4. service log 검사 (kubectl logs , sudo journalctl -u )
+-- k8s docs troubleshooting Cluster documentation
+
+-------------------------------------------------
+1. The cluster is broken again. We tried deploying an application but it's not working. Troubleshoot and fix the issue.
+Start looking at the deployments.
+
+ Warning  Failed   10m (x5 over 11m)    kubelet, controlplane  
+ Error: failed to start container "kube-scheduler": Error response from daemon: 
+ OCI runtime create failed: container_linux.go:349: starting container process caused 
+ "exec: \"kube-schedulerrrr\": executable file not found in $PATH": unknown
+
+ tip : static pod의 이름 뒤에는 Node의 이름이 붙는다
+
+kubelet 파악하는법
+--> cat /var/lib/kubelet/config.yaml
+
+ 2. Scale the deployment app to 2 pods.
+
+ 3. Even though the depoyment was scaled to 2, the number of PODs does not seem to increase. Investigate and fix the issue.
+Inspect the component responsible for managing deployments and replicasets.
+
+controller manager 
+Generated self-signed cert in-memory
+stat /etc/kubernetes/controller-manager-XXXX.conf: no such file or directory
+
+4. Something is wrong with scaling again. We just tried scaling the deployment to 3 replicas. But it's not happening.
+Investigate and fix the issue
+
+unable to load client CA file "/etc/kubernetes/pki/ca.crt": open /etc/kubernetes/pki/ca.crt: no such file or directory
+--> hostpath가 잘못되었음
