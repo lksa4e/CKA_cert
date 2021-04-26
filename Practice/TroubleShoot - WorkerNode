@@ -1,0 +1,39 @@
+1. Node Status 확인 (Conditions의 True or False 확인)
+   Node의 CPU, disk 확인 
+   --> top
+   --> df -h
+2. kubelet Status 확인 
+--> service kubelet status 
+--> sudo journalctl -u kubelet -f
+
+3. certificate 확인 
+--> openssl x509 -in /var/lib/kubelet/worker-1.crt -text (Issuer, validity, CN O)
+
+
+-----------------------------------------------------------------
+1. fix node01
+MemoryPressure       Unknown   Sun, 25 Apr 2021 15:34:07 +0000   Sun, 25 Apr 2021 15:36:44 +0000   NodeStatusUnknown   Kubelet stopped posting node status.
+  DiskPressure         Unknown   Sun, 25 Apr 2021 15:34:07 +0000   Sun, 25 Apr 2021 15:36:44 +0000   NodeStatusUnknown   Kubelet stopped posting node status.
+  PIDPressure          Unknown   Sun, 25 Apr 2021 15:34:07 +0000   Sun, 25 Apr 2021 15:36:44 +0000   NodeStatusUnknown   Kubelet stopped posting node status.
+  Ready                Unknown   Sun, 25 Apr 2021 15:34:07 +0000   Sun, 25 Apr 2021 15:36:44 +0000   NodeStatusUnknown   Kubelet stopped posting node status.
+
+--> kubelet 문제있으면 restart 시켜보자
+
+2. kubelet이 activating 상태이지만 안될 때
+--> sudo journalctl -u kubelet -f
+
+unable to load client CA file /etc/kubernetes/pki/WRONG-CA-FILE.crt: open /etc/kubernetes/pki/WRONG-CA-FILE.crt: no such file or directory
+
+cd /etc/systemd/system/kubelet.service.d --------- cd /etc/kubernetes/kubelet.conf 에서 경로 확인 후 .yaml 수정
+
+3. kubelet 에러 메세지가 node not found일 때
+dial tcp 172.17.0.5:6553: connect: connection refused
+
+ Attempting to register node node01
+de_status.go:92] Unable to register node "node01" with API server: Post "https://172.17.0.5:6553/api/v1/nodes": dial tcp 172.17.0.5:6553:
+
+--> kubectl cluster-info
+Kubernetes master is running at https://172.17.0.5:6443
+KubeDNS is running at https://172.17.0.5:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+/etc/kubernetes/kubelet.conf 의 api 서버 포트를 제대로 
