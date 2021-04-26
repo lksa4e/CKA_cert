@@ -1,0 +1,91 @@
+Network Plugin in kubernetes
+The kubelet is responsible for executing plugins as we mention the following parameters in kubelet configuration.
+- cni-bin-dir:   Kubelet probes this directory for plugins on startup
+
+- network-plugin: The network plugin to use from cni-bin-dir. 
+It must match the name reported by a plugin probed from the plugin directory.
+
+
+Kubernetes resources for coreDNS are:   
+
+1. a service account named coredns, (서비스 어카운트)
+2. cluster-roles named coredns and kube-dns (클러스터롤)
+3. clusterrolebindings named coredns and kube-dns,  (클러스터롤 바인딩)
+4. a deployment named coredns, (디플로이먼트)
+5. a configmap named coredns and a (컨피그맵)
+6. service named kube-dns. (서비스)
+
+While analyzing the coreDNS deployment you can see that the the Corefile plugin 
+consists of important configuration which is defined as a configmap.
+
+Port 53 is used for for DNS resolution.
+----------------------------------------------------------
+Troubleshooting issues related to coreDNS
+1. If you find CoreDNS pods in pending state first check network plugin is installed.
+
+2. coredns pods have CrashLoopBackOff or Error state
+a)Upgrade to a newer version of Docker.
+b)Disable SELinux.
+c)Modify the coredns deployment to set allowPrivilegeEscalation to true:
+  kubectl -n kube-system get deployment coredns -o yaml | \
+  sed 's/allowPrivilegeEscalation: false/allowPrivilegeEscalation: true/g' | \
+  kubectl apply -f -
+d)Another cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop.
+
+3. If CoreDNS pods and the kube-dns service is working fine, check the kube-dns service has valid endpoints.
+
+              kubectl -n kube-system get ep kube-dns
+
+If there are no endpoints for the service, inspect the service and make sure it uses the correct selectors and ports.
+
+-------------------------------------------------------------
+
+**Troubleshooting Test 1:** A simple 2 tier application is deployed in the triton namespace. 
+It must display a green web page on success. Click on the app tab at the top of your terminal to view your application. 
+It is currently failed. Troubleshoot and fix the issue.
+
+Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. 
+Feel free to edit, delete or recreate objects as necessary
+
+--> 페이지가 아얘 로드가 안된다--> (네트워크 가능성 
+--> 모든 것들이 정상적인거 같으면 network plugin 설치 의심
+
+-------------------
+
+kube-proxy CrshLoopBackOff
+
+F0426 08:04:36.361360       1 server.go:490] failed complete: open /var/lib/kube-proxy/configuration.conf: no such file or directory
+
+1. Check the logs of the kube-proxy pods
+ kubectl -n kube-system logs <name_of_the_kube_proxy_pod>
+
+ 2. The configuration file "/var/lib/kube-proxy/configuration.conf" is not valid. The configuration path does not match the data in the ConfigMap.
+ kubectl -n kube-system describe configmap kube-proxy shows that the file name used is "config.conf" which is mounted in the kube-proxy daemonset pods at the path /var/lib/kube-proxy/config.conf
+
+ 3. However in the DaemonSet for kube-proxy, the command used to start the kube-proxy pod makes use of the path /var/lib/kube-proxy/configuration.conf.
+
+  Correct this path to /var/lib/kube-proxy/config.conf as per the ConfigMap and recreate the kube-proxy pods.
+
+  This should get the kube-proxy pods back in a running state.
+
+--> F0426 08:08:04.234775       1 server.go:490] failed complete: failed to decode: no kind "Config" is registered for version 
+"v1" in scheme "k8s.io/kubernetes/pkg/proxy/apis/config/scheme/scheme.go:29"
+
+---------------------------------
+F0426 07:34:27.843204       1 server.go:490] failed complete: failed to decode: 
+no kind "Config" is registered for version "v1" in scheme "k8s.io/kubernetes/pkg/proxy/apis/config/scheme/scheme.go:29"
+
+ The kube-dns service is not working as expected. The first thing to check is if the service has a valid endpoint? Does it point to the kube-dns/core-dns?
+
+ Run: kubectl -n kube-system get ep kube-dns
+
+ If there are no endpoints for the service, inspect the service and make sure it uses the correct selectors and ports.
+
+ Run: kubectl -n kube-system describe svc kube-dns
+
+ Note that the selector used is: k8s-app=core-dns
+
+ If you compare this with the label set on the coredns deployment and its pods, you will see that the selector should be k8s-app=kube-dns
+
+ Modify the kube-dns service and update the selector to k8s-app=kube-dns
+ (Easiest way is to use the kubectl edit command)
