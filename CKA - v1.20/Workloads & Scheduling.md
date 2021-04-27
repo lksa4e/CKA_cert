@@ -1,4 +1,4 @@
-# Understand deployments and how to perform rolling update and rollbacks
+# Workloads & Scheduling
 ## Agenda 
 1. Understand deployments and how to perform rolling update and rollbacks
 2. Use ConfigMaps and Secrets to configure applications
@@ -14,6 +14,20 @@ Scale Application - https://kubernetes.io/docs/concepts/cluster-administration/m
 robust, self-healing, application deployment - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/ , https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ <br>
 Resource Limit - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ <br>
 Manifest management, common templating tool - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/ , https://kubernetes.io/docs/tasks/manage-kubernetes-objects/ <br>
+
+# Understand deployments and how to perform rolling update and rollbacks
+
+## Summarize kubectl commands
+```
+$ kubectl create -f deployment-definition.yaml
+$ kubectl get deployments
+$ kubectl apply -f deployment-definition.yaml
+$ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1 --record
+$ kubectl rollout status deployment/myapp-deployment
+$ kubectl rollout history deployment/myapp-deployment
+$ kubectl rollout undo deployment/myapp-deployment
+$ kubectl rollout undo deployment/myapp-deployment --to-revision 5
+```
 
 Deployments는 Replication Controller를 대체하기 위한 것입니다. 동일한 복제 기능(Replica Sets를 통한)과 변경 사항을 롤아웃하고 필요한 경우 롤백하는 기능도 제공합니다.
 
@@ -70,8 +84,16 @@ spec:
         ports:
         - containerPort: 80
 ```
-Imperative Way - `kubectl set image deployment/frontend www=nginx:v2 --record` --> frontend deployment의 www 컨테이너의 image를 nginx:v2로 변경
-Declarative Way - ` kubectl apply -f updateddeployment.yaml --record=true`  --> file의 변경사항 적용
+Imperative Way 
+```shell
+kubectl set image deployment/frontend www=nginx:v2 --record
+# frontend deployment의 www 컨테이너의 image를 nginx:v2로 변경
+```
+Declarative Way 
+```
+kubectl apply -f updateddeployment.yaml --record=true
+# file의 변경사항 적용
+```
 
 Followed by the following:
 
@@ -100,7 +122,6 @@ deployment "nginx-deployment" successfully rolled out
 
 또한 kubectl rollout history 커맨드를 사용하여 배포의 revision 기록을 볼 수 있습니다.
 
-
 ```shell
 kubectl rollout history deployment/nginx-deployment
 
@@ -111,14 +132,7 @@ REVISION  CHANGE-CAUSE
 4     	<none>
 5     	kubectl apply --filename=updateddeployment.yaml --record=true
 ```
-또는 imperative way로 작업을 수행할 수도 있습니다:
 
-```shell
-kubectl set image deployments/nginx-deployment nginx=nginx:1.9.1 --record
-
-deployment.extensions/nginx-deployment image updated
-deployment.extensions/nginx-deployment image updated
-```
 
 ## Rollback
 
