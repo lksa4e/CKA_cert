@@ -400,7 +400,9 @@ kubectl get pods -o wide | grep gold (make sure this is scheduled on master node
 DB의 스냅 샷을 찍어 안전한 위치에 저장:
 
 ```bash
-ETCDCTL_API=3 etcdctl snapshot save snapshot.db --cacert /etc/kubernetes/pki/etcd/server.crt --cert /etc/kubernetes/pki/etcd/ca.crt --key /etc/kubernetes/pki/etcd/ca.key
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /opt/etcd-backup.db
 ```
 Verify the backup:
 
@@ -416,7 +418,7 @@ sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshot.db
 Perform a restore:
 
 ```shell
-ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
+ETCDCTL_API=3 etcdctl --endpoints 127.0.0.1:2379 snapshot restore snapshotdb
 ```
 
 참고 : https://github.com/David-VTUK/CKA-StudyGuide/blob/master/RevisionTopics/01-Cluster%20Architcture%2C%20Installation%20and%20Configuration.md
