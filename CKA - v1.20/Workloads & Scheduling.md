@@ -17,7 +17,7 @@ Manifest management, common templating tool - https://kubernetes.io/docs/concept
 
 # Understand deployments and how to perform rolling update and rollbacks
 
-## Summarize kubectl commands
+## Summarize Rolling Upgrade & Rollback kubectl commands
 ```
 $ kubectl create -f deployment-definition.yaml
 $ kubectl get deployments
