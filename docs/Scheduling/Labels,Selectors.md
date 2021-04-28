@@ -4,12 +4,12 @@
 
 ▶︎ `env`라벨이 `prod`인 모든 오브젝트 찾기
 ```shell
-$ kubectl get all -lenv=prod
+$ kubectl get all -l env=prod
 ```
 
 ▶︎ 여러 라벨로 POD 찾기
 ```shell
-$ kubectl get po -lenv=prod,bu=finance,tier=frontend
+$ kubectl get po -l env=prod,bu=finance,tier=frontend
 ```
   
 #### 레이블은 각 항목에 연결된 속성입니다.
