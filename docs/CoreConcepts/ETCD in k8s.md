@@ -2,7 +2,7 @@
 
 ## ETCD Datastore
 - ETCD 데이터 저장소는 **`Nodes`**, **`PODS`**, **`Configs`**, **`Secrets`**, **`Accounts`**, **`Roles`**, **`Bindings`** 등과 같은 클러스터 관련 정보를 저장함
-- **`kubectl get`** 명령을 실행할 때 표시되는 모든 정보는 **`ETCD Server`**에서 가져온 것임
+- **`kubectl get`** 명령을 실행할 때 표시되는 모든 정보는 **`ETCD Server`** 에서 가져온 것임
 
 ## Setup - Manual
 - 클러스터를 처음부터 설정 한 경우 ETCD  **`ETCD`** 바이너리를 직접 다운로드하여 ETCD를 배포함
@@ -14,7 +14,7 @@
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/etcd.PNG>
   
 ## Setup - Kubeadm
--  **`kubeadm`**을 사용하여 클러스터를 셋업하면 kubeadm이 **`kube-system`** 네임스페이스의 POD로 etcd 서버를 배포함
+-  **`kubeadm`** 을 사용하여 클러스터를 셋업하면 kubeadm이 **`kube-system`** 네임스페이스의 POD로 etcd 서버를 배포함
   ```
   $ kubectl get pods -n kube-system
   ```
@@ -25,7 +25,7 @@
   ```
   $ kubectl exec etcd-master -n kube-system etcdctl get / --prefix -key
   ```
-- k8s는 특정 디렉토리 구조에 데이터를 저장하며, root 디렉토리는 **`registry`**이고, 그 아래에 **`minions`**, **`nodes`**, **`pods`**, **`replicasets`**, **`deployments`**, **`roles`**, **`secrets`** 및 기타와 같은 다양한 k8s 구성이 있음.
+- k8s는 특정 디렉토리 구조에 데이터를 저장하며, root 디렉토리는 **`registry`** 이고, 그 아래에 **`minions`**, **`nodes`**, **`pods`**, **`replicasets`**, **`deployments`**, **`roles`**, **`secrets`** 및 기타와 같은 다양한 k8s 구성이 있음.
   
   <img src = https://github.com/kodekloudhub/certified-kubernetes-administrator-course/blob/master/images/etcdctl1.PNG>
 
