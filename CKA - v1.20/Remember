@@ -25,3 +25,7 @@
    - restore 한 후 restore 정보를 etcd 구성 --data-dir= 에 넣어주어야 함
    - 밑에쪽의 voluems, volumemount의 hostPath도 똑같이 바꿔줘야함
 ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var/lib/etcd-from-backup
+
+9. kubectl 커맨드가 작동하지 않는 경우에는 kube-apiserver or etcd 가 down 된 경우
+   - docker ps -a 
+   - docker logs를 통해 컨테이너 레벨에서 확인
