@@ -31,3 +31,5 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
    - docker logs를 통해 컨테이너 레벨에서 확인
 
 10. user가 생성한 csr key file을 가지고 CSR object를 만드려면 base64로 인코딩을 해야함
+
+11. CSR의 group을 확인하기 위해서는 csr 을 yaml 형태로 조회해야함
