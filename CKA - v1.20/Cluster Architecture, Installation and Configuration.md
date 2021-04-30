@@ -49,13 +49,13 @@ Kubernetes는 RBAC 프레임워크를 구현하여 클러스터 내의 리소스
 ## Step 1 - Authentication (인증)
 
 첫 번째 단계는 사용자 또는 서비스 계정이 자신을 식별하는 방법인 인증입니다. 소스에 따라, 그에 상응하는 인증 모듈이 사용됩니다. 
-인증 모듈은 아래 구성 요소를 인증할 수 있습니다:
+모든 인증은 Kube-api Server를 통해서 인증됩니다.
 
-*   Client Certificate
-*   Password
-*   Plain Tokens
-*   Bootstrap Tokens
-*   JWT Tokens (for service accounts)
+Auth Mechanisms
+*   Static Password File --> 사용 x
+*   Static Token File --> 사용 x
+*   Certificates
+*   Identity Services(3rd Party tool)
 
 모든 인증은 TLS를 통한 HTTP를 통해 처리됩니다. 
 
