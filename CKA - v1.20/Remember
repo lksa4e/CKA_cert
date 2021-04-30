@@ -1,0 +1,27 @@
+1. 502 bad gateway가 뜨는경우
+   - Service가 없는 경우
+
+2. container port 에서 expose 하라고 하는 경우 pod에도 port 설정을 해주어야 한다.
+   
+3. pod가 pending 상태에 있는 이유
+   - 스케쥴러가 없는 경우
+     -> nodeName 지정을 통해 수동 할당 가능
+   - 스케쥴링할 노드가 없는경우(자원이 없어서)
+
+4. ReplicaSet에서 template을 사용할 경우에 rs의 label과 template의 label은 동일해야한다. (deployment도 확인 필요)
+
+5. Pod의 CrashLoopBackOff의 이유
+   - Out of memory (OOMKilled)
+
+6. controlplane node에서 etcd cluster로의 address
+   - --listen-client-urls=https://127.0.0.1:2379,https://10.156.254.3:2379
+
+7. etcd의 server certificate file 위치
+   - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+   etcd의 CA Certificate file 위치
+   - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+
+8. etcd restore의 주의사항
+   - restore 한 후 restore 정보를 etcd 구성 --data-dir= 에 넣어주어야 함
+   - 밑에쪽의 voluems, volumemount의 hostPath도 똑같이 바꿔줘야함
+ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var/lib/etcd-from-backup
