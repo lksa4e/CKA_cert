@@ -62,3 +62,14 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
     volume의 hostpath는 node에서 볼륨 역할을 하는 경로이다.
 
 19. storage class 를 no-provisioner 로 사용하는 경우는 pv를 사용하는 pod가 생성될때까지 bound를 pending시키기 위함
+
+20. DNS resolution을 확인하기 위해 nslookup을 사용하는 경우 nslookup은 /etc/resolv.conf 파일에 있는 local 값을 참조하지 않고 DNS 서버만 참조한다
+
+21. 클러스터의 network를 조회하는 방법
+   - ip link -> network interface 조회
+   - ip addr -> network interface + ip address까지 조회
+   - ifconfig -> 위에 두개꺼 합쳐놓은거(이거를 쓰자)
+   - arp <node> -> 상대 Node의 Mac address를 조회하는 방법 (ssh로 들어가서 ip addr 한 후에 ens 찾는 방법도 있음)
+   - ip route -> route 정보를 확인하는 방법 (default Gateway의 ip address를 조회하는 방법)
+   - netstat -nplt -> program(kubelet ,etcd, kube-proxy,,,) 들의 port를 조회하는 방법
+   - cat /etc/network/interfaces -> 네트워크 인터페이스에 대한 정보 조회
