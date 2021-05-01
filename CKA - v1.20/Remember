@@ -67,9 +67,31 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
 
 21. 클러스터의 network를 조회하는 방법
    - ip link -> network interface 조회
-   - ip addr -> network interface + ip address까지 조회
+   - ip addr -> network interface + ip address까지 조회 (할당되는 범위를 확인할 수 있음)
    - ifconfig -> 위에 두개꺼 합쳐놓은거(이거를 쓰자)
    - arp <node> -> 상대 Node의 Mac address를 조회하는 방법 (ssh로 들어가서 ip addr 한 후에 ens 찾는 방법도 있음)
    - ip route -> route 정보를 확인하는 방법 (default Gateway의 ip address를 조회하는 방법)
    - netstat -nplt -> program(kubelet ,etcd, kube-proxy,,,) 들의 port를 조회하는 방법
    - cat /etc/network/interfaces -> 네트워크 인터페이스에 대한 정보 조회
+
+22. 네트워크 플러그인에 대한 정보는 kubelet의 구성정보에 담겨있음 (kubelet.service)
+   - 구성정보에서 cni 바이너리의 폴더를 탐색하면 사용할 수 있는 cni 플러그인들이 있다.
+
+23. 네트워크 플러그인 구성에 대한 정보 확인
+   - ps -aux | grep kubelet
+
+24. 사용중인 CNI에 대한 정보 확인
+   - ls /etc/cni/net.d
+
+25. Pod가 계속 ContainerCreating 상태에 머물러 있을 때
+   - CNI plugin이 없는 경우
+
+26. Pod가 할당되는 ip addr에 대한 정보
+   - kubectl -n kube-system logs weave-net-cnxbt weave
+
+27. Service가 할당되는 ip addr에 대한 정보 (kube-apiserver 에 있음)
+   - cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+
+28. CoreDNS의 file 위치
+   - cat /etc/coredns/Corefile
+   
