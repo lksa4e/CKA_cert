@@ -26,6 +26,7 @@
    - 밑에쪽의 voluems, volumemount의 hostPath도 똑같이 바꿔줘야함
 ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var/lib/etcd-from-backup
 
+
 9. kubectl 커맨드가 작동하지 않는 경우에는 kube-apiserver or etcd 가 down 된 경우
    - docker ps -a 
    - docker logs를 통해 컨테이너 레벨에서 확인
@@ -33,3 +34,22 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
 10. user가 생성한 csr key file을 가지고 CSR object를 만드려면 base64로 인코딩을 해야함
 
 11. CSR의 group을 확인하기 위해서는 csr 을 yaml 형태로 조회해야함
+
+12. Kubeconfig 위치 
+   - /root/.kube
+
+13. RBAC를 사용하고 싶을 때는 kube api server의 config에서(/etc/kubernetes/manifest/apiserver.yaml)  
+    --authorization-mode=RBAC를 해주어야함
+    - 적용되는 순서는 앞에서부터 차례대로 적용됨
+
+14. Role,Rolebinding은 Namespace에 종속됨. 특정 namespace에 대한 권한을 부여하려면 metadata에 namespace 선언 필요
+
+15. RBAC의 적용이 제대로 되었는지 확인하기 위한 명령어
+   - kubectl auth can-i <명령> <target> --as <user name>
+     kubectl auth can-i create deployments --as dev-user
+
+16. RBAC apiGroups를 확인하기 위한 명령어
+   - kubectl api-resources
+
+17. pod의 user를 확인하는 방법
+   - kubectl exec <pod-name> -- whoami
