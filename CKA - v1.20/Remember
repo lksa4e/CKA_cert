@@ -93,5 +93,44 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
    - cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
 
 28. CoreDNS의 file 위치
-   - cat /etc/coredns/Corefile
-   
+   - cat /etc/coredns/Corefile (Pod 안에서)
+
+29. Ingress는 namespace에 종속된다. 다른 namespace를 사용하고 싶으면 새로 만들어야함
+
+30. ingress controller 배포과정
+   1. namespace 만들기 (선택)
+   2. configmap 만들기
+   3. Serviceaccount 만들기
+   4. Role,Rolebinding 만들어서 SA 인증
+   5. Deployment 만들기(ingress controller)
+   6. Service 만들기 (ingress controller의 svc)
+   7. ingress resource 만들기
+
+31. 트러블슈팅 - 어플리케이션 (users report some issue with accessing the application)
+   - 프론트엔드부터 차근차근 
+   - curl http://web-service-ip:node-port
+   - describe svc, pod 제대로 매칭되었는지
+   - kubectl logs web -f --previous 통해 에러 확인 
+   = svc의 port 지정이 잘못된경우
+   = svc의 selector 지정이 잘못된 경우
+   = deployment, Pod의 env 지정이 잘못된 경우
+
+32. 트러블슈팅 - 컨트롤플레인 (cluster is broken)
+   - kube-apiserver , controller-manager, scheduler, kubelet, kube-proxy의 상태를 확인 ==> service <> status
+   - log 확인, journalctl 
+   - deployment scale 안되는거 --> kubecontroller manager
+   - 컨트롤플레인 컴포넌트는 대부분 manifest 파일 만지작하면 고쳐짐
+
+33. 트러블슈팅 - 워커 노드 (kubelet이 대부분인듯)
+   - describe node 후 condition 확인
+   - 만약 모든 condition이 unknown인 경우에는 워커노드가 loss됬을 수 있음
+   - kubelet의 로그 조회!!, kubelet certificate 조회
+   = 단순 kubelet 중단 ==> ssh 후 service kubelet start
+   = kubelet은 고치고 나면 항상 재시작 해주자!
+
+34. 트러블슈팅 - 네트워크
+   - kubelet의 네트워크 플러그인 설정이 제대로 되었는지 
+   - CoreDNS에 문제 생겼을때 ==> service account, cluster role, clusterrolebinding, deployment, configmap, service 다 가능함
+     1. 만약 Pending -> 일단 network plugin이 설치되어있는지 확인
+     2. CrashLoopback or Error -> 답없는듯
+     3. 만약 CoreDNS가 제대로 동작중인데 뭔가 문제있는듯 -> kube-dns endpoint 확인 (kubectl -n kube-system get ep kube-dns)
