@@ -7,6 +7,9 @@
    - 스케쥴러가 없는 경우
      -> nodeName 지정을 통해 수동 할당 가능
    - 스케쥴링할 노드가 없는경우(자원이 없어서)
+   - 볼륨 지정이 제대로 안되서
+     kubectl exec webapp -- cat /log/app.log
+     Error from server (BadRequest): pod webapp does not have a host assigned
 
 4. ReplicaSet에서 template을 사용할 경우에 rs의 label과 template의 label은 동일해야한다. (deployment도 확인 필요)
 
@@ -53,3 +56,9 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
 
 17. pod의 user를 확인하는 방법
    - kubectl exec <pod-name> -- whoami
+
+18. definition file에서 정의하는 volumemounts의 name은 colume의 name과 동일하다.
+    컨테이너 내부의 볼륨마운트는 컨테이너 내부에서 해당 볼륨을 Mountpath 경로로 사용하겠다는 것이고,
+    volume의 hostpath는 node에서 볼륨 역할을 하는 경로이다.
+
+19. storage class 를 no-provisioner 로 사용하는 경우는 pv를 사용하는 pod가 생성될때까지 bound를 pending시키기 위함
