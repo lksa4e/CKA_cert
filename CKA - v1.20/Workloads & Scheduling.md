@@ -7,17 +7,9 @@
 5. Understand how resource limits can affect Pod scheduling
 6. Awareness of manifest management and common templating tools
 
-deployment - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/ <br>
-Configmap - https://kubernetes.io/docs/concepts/configuration/configmap/ <br>
-Secret - https://kubernetes.io/docs/concepts/configuration/secret/ <br>
-Scale Application - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application <br>
-robust, self-healing, application deployment - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/ , https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ <br>
-Resource Limit - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ <br>
-Manifest management, common templating tool - https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/ , https://kubernetes.io/docs/tasks/manage-kubernetes-objects/ <br>
-
 # Understand deployments and how to perform rolling update and rollbacks
 
-## Summarize Rolling Upgrade & Rollback kubectl commands
+##  Rolling Upgrade & Rollback kubectl commands 요약
 ```
 $ kubectl create -f deployment-definition.yaml
 $ kubectl get deployments
