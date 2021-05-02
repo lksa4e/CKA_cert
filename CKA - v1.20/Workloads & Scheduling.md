@@ -9,16 +9,27 @@
 
 ## Understand deployments and how to perform rolling update and rollbacks
 
-###  Rolling Upgrade & Rollback kubectl commands 요약
+###  Workloads & Scheduling kubectl command 요약
 ```
-$ kubectl create -f deployment-definition.yaml
-$ kubectl get deployments
-$ kubectl apply -f deployment-definition.yaml
+# deployment를 만드는 첫번째 버전부터 annotation에 기록 저장하고 싶을 때
+$ kubectl create deployment myapp-deployment --replicas=1 --dry-run=client -o yaml > myapp.deployment.yaml
+$ kubectl apply -f myapp.deployment.yaml --record
+
+# Rolling Update
 $ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1 --record
 $ kubectl rollout status deployment/myapp-deployment
 $ kubectl rollout history deployment/myapp-deployment
 $ kubectl rollout undo deployment/myapp-deployment
 $ kubectl rollout undo deployment/myapp-deployment --to-revision 5
+
+# ConfigMap
+$ kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
+$ kubectl create configmap app-config --from-file=app_config.properties (Another way)
+
+# Secret 
+# 주의할 점 -- 선언형 방식으로 사용할 경우에는 data 값을 base64를 통해 인코딩한 후에 사용해야 한다.
+$ kubectl create secret generic app-secret --from-literal=DB_Host=mysql --from-literal=DB_User=root --from-literal=DB_Password=paswrd
+$ kubectl create secret generic app-secret --from-file=app_secret.properties
 ```
 
 Deployments는 Replication Controller를 대체하기 위한 것입니다. 동일한 복제 기능(Replica Sets를 통한)과 변경 사항을 롤아웃하고 필요한 경우 롤백하는 기능도 제공합니다.
