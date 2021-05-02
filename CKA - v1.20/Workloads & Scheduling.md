@@ -7,9 +7,9 @@
 5. Understand how resource limits can affect Pod scheduling
 6. Awareness of manifest management and common templating tools
 
-# Understand deployments and how to perform rolling update and rollbacks
+## Understand deployments and how to perform rolling update and rollbacks
 
-##  Rolling Upgrade & Rollback kubectl commands 요약
+###  Rolling Upgrade & Rollback kubectl commands 요약
 ```
 $ kubectl create -f deployment-definition.yaml
 $ kubectl get deployments
