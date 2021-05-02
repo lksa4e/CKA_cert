@@ -128,9 +128,16 @@ ETCDCTL_API=3 etcdctl snapshot restore /opt/snapshot-pre-boot.db --data-dir=/var
    = 단순 kubelet 중단 ==> ssh 후 service kubelet start
    = kubelet은 고치고 나면 항상 재시작 해주자!
 
-34. 트러블슈팅 - 네트워크
+34. 트러블슈팅 - 네트워크 (아예 앱 창이 안뜸)
    - kubelet의 네트워크 플러그인 설정이 제대로 되었는지 
    - CoreDNS에 문제 생겼을때 ==> service account, cluster role, clusterrolebinding, deployment, configmap, service 다 가능함
      1. 만약 Pending -> 일단 network plugin이 설치되어있는지 확인
      2. CrashLoopback or Error -> 답없는듯
      3. 만약 CoreDNS가 제대로 동작중인데 뭔가 문제있는듯 -> kube-dns endpoint 확인 (kubectl -n kube-system get ep kube-dns)
+                                                          selector 확인
+     4. daemonset 경로에 문제 있을땐 configmap 세팅을 따라서
+
+35. pod의 상태가 Init:error 일 경우 -> Init container 수정 
+
+36. application, svc와 관련된 issue fix 후에는 test pod를 만들어서 nslookup을 통해서 확인할 수 있다.
+
