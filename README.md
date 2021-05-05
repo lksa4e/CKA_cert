@@ -1,5 +1,6 @@
 #CKA_cert
 ==========
+<img src = https://github.com/lksa4e/CKA_cert/blob/main/k8s%20cert.png?raw=true width = 600>
 ## Core Concepts
   - 클러스터 구조
   - API 기본 요소
